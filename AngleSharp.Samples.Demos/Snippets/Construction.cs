@@ -10,13 +10,13 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //Create empty document
+            // Create empty document
             var document = DocumentBuilder.Html(String.Empty);
 
-            //Set title
+            // Set title
             document.Title = "My document";
 
-            //Get the body
+            // Get the body
             var body = document.Body;
 
             //Create elements using generics, set properties
@@ -34,7 +34,7 @@
             img.Source = "http://www.example.com/link";
             body.AppendChild(img);
 
-            //Output the resulting DOM
+            // Output the resulting DOM
             Console.WriteLine(document.DocumentElement.OuterHtml);
         }
     }

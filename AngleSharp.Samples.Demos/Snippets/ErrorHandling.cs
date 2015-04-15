@@ -9,8 +9,8 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //The original source, see
-            //http://www.google.com/error
+            // The original source, see
+            // http://www.google.com/error
             var source = @"
 <!DOCTYPE html>
 <html lang=en>
@@ -24,10 +24,10 @@
   <p><b>404.</b> <ins>That’s an error.</ins>
   <p>The requested URL <code>/error</code> was not found on this server.  <ins>That’s all we know.</ins>";
 
-            //Just get the DOM representation
+            // Just get the DOM representation
             var doc = DocumentBuilder.Html(source);
 
-            //Serialize it back to the console
+            // Serialize it back to the console
             Console.WriteLine(doc.DocumentElement.OuterHtml);
         }
     }

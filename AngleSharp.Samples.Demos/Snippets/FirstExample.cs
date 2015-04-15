@@ -9,10 +9,10 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //Create a new document from the given source
+            // Create a new document from the given source
             var document = DocumentBuilder.Html("<h1>Some example source</h1><p>This is a paragraph element");
 
-            //Do something with document like the following
+            // Do something with document like the following
             Console.WriteLine("Serializing the (original) document:");
             Console.WriteLine(document.DocumentElement.OuterHtml);
 

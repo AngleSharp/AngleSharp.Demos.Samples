@@ -10,16 +10,13 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //We require a custom configuration
+            // We require a custom configuration
             var config = new Configuration();
 
-            //Including a script engine
-            config.Register(new JavaScriptEngine());
+            // Including the scripting
+            config.WithJavaScript();
 
-            //And enabling scripting
-            config.IsScripting = true;
-
-            //This is our sample source, we will trigger the load event
+            // This is our sample source, we will trigger the load event
             var source = @"<!doctype html>
 <html>
 <head><title>Legacy event sample</title></head>
@@ -36,7 +33,7 @@ console.log('After setting the handler via onload!');
 </body>";
             var document = DocumentBuilder.Html(source, config);
 
-            //HTML should be output in the end
+            // HTML should be output in the end
             Console.WriteLine(document.DocumentElement.OuterHtml);
         }
     }

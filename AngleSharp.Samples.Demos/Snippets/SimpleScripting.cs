@@ -10,16 +10,13 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //We require a custom configuration
+            // We require a custom configuration
             var config = new Configuration();
 
-            //Including a script engine
-            config.Register(new JavaScriptEngine());
+            // Including the scripting
+            config.WithJavaScript();
 
-            //And enabling scripting
-            config.IsScripting = true;
-
-            //This is our sample source, we will set the title and write on the document
+            // This is our sample source, we will set the title and write on the document
             var source = @"<!doctype html>
 <html>
 <head><title>Sample</title></head>
@@ -31,7 +28,7 @@ document.write('<span class=greeting>Hello World!</span>');
 </body>";
             var document = DocumentBuilder.Html(source, config);
 
-            //Modified HTML will be output
+            // Modified HTML will be output
             Console.WriteLine(document.DocumentElement.OuterHtml);
         }
     }

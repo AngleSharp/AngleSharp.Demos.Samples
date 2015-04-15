@@ -10,7 +10,7 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //Create a new document from the given source
+            // Create a new document from the given source
             var document = DocumentBuilder.Html("<b><i>This is some <em> bold <u>and</u> italic </em> text!</i></b>");
             var emphasize = document.QuerySelector("em");
 

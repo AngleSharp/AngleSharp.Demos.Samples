@@ -11,13 +11,13 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            //Create a new document from the given source
+            // Create a new document from the given source
             var document = DocumentBuilder.Html("<ul><li>First item<li>Second item<li class='blue'>Third item!<li class='blue red'>Last item!</ul>");
 
-            //Do something with LINQ
-            var blueListItemsLinq = document.All.Where(m => m.TagName == "li" && m.ClassList.Contains("blue"));
+            // Do something with LINQ
+            var blueListItemsLinq = document.All.Where(m => m.LocalName == "li" && m.ClassList.Contains("blue"));
 
-            //Or directly with CSS selectors
+            // Or directly with CSS selectors
             var blueListItemsSelector = document.QuerySelectorAll("li.blue");
 
             Console.WriteLine("Comparing both ways ...");

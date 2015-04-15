@@ -13,14 +13,13 @@
             //We require a custom configuration
             var config = new Configuration();
 
-            //Including a script engine
-            config.Register(new JavaScriptEngine());
+            // Including the scripting
+            config.WithJavaScript();
 
-            //And enabling scripting + styling (should be enabled anyway)
-            config.IsScripting = true;
-            config.IsStyling = true;
+            // Including the styling
+            config.WithCss();
 
-            //This is our sample source, we will do some DOM manipulation
+            // This is our sample source, we will do some DOM manipulation
             var source = @"<!doctype html>
 <html>
 <head><title>Sample</title></head>
@@ -57,7 +56,7 @@ div {
 </body>";
             var document = DocumentBuilder.Html(source, config);
 
-            //HTML will have changed completely (e.g., no more script element)
+            // HTML will have changed completely (e.g., no more script element)
             Console.WriteLine(document.DocumentElement.OuterHtml);
         }
     }
