@@ -24,8 +24,10 @@
                 clear = false
             };
             var snippets = FindSnippets().ToList();
-            var usepause = args.Contains("--pause") || defaults.pause;
-            var clearscr = args.Contains("--clear") || defaults.clear;
+            var usepause = args.Contains("-p") || args.Contains("--pause") || defaults.pause;
+            var clearscr = args.Contains("-c") || args.Contains("--clear") || defaults.clear;
+            var pause = Switch(usepause, PauseConsole);
+            var clear = Switch(clearscr, ClearConsole);
 
             RunSynchronously(async () =>
             {
@@ -38,13 +40,15 @@
 
                     Console.WriteLine();
 
-                    if (usepause)
-                        PauseConsole();
-
-                    if (clearscr)
-                        ClearConsole();
+                    pause();
+                    clear();
                 }
             });
+        }
+
+        static Action Switch(Boolean condition, Action active)
+        {
+            return condition ? active : () => { };
         }
 
         static void RunSynchronously(Func<Task> runner)
