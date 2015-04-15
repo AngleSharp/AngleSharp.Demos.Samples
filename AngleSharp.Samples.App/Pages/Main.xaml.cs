@@ -5,7 +5,7 @@
     /// <summary>
     /// Interaction logic for Main.xaml
     /// </summary>
-    public partial class Main : Page
+    public partial class Main : UserControl
     {
         public Main()
         {
