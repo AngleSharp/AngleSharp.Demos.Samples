@@ -77,11 +77,9 @@
 
             try
             {
-                //ProfilerViewModel.Data.Start("Query", OxyPlot.OxyColors.SteelBlue);
                 var sw = Stopwatch.StartNew();
                 var elements = document.QuerySelectorAll(query);
                 sw.Stop();
-                //ProfilerViewModel.Data.Stop();
                 source.Clear();
 
                 foreach (var element in elements)
