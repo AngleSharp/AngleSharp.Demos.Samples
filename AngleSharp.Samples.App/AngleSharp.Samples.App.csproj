@@ -40,14 +40,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="AngleSharp">
-      <HintPath>..\packages\AngleSharp.0.8.0\lib\portable-windows8+net45+windowsphone8+wpa\AngleSharp.dll</HintPath>
+    <Reference Include="AngleSharp, Version=0.8.1.40696, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AngleSharp.0.8.1\lib\portable-windows8+net45+windowsphone8+wpa\AngleSharp.dll</HintPath>
     </Reference>
-    <Reference Include="AngleSharp.Scripting.JavaScript">
-      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.1.1\lib\net45\AngleSharp.Scripting.JavaScript.dll</HintPath>
+    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.1.2.24288, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.1.2\lib\net45\AngleSharp.Scripting.JavaScript.dll</HintPath>
     </Reference>
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\packages\ModernUI.WPF.1.0.4\lib\net45\FirstFloor.ModernUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Jint">
+      <HintPath>..\packages\Jint.2.4.0\lib\portable-net40+sl50+win+wpa81+wp80\Jint.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="OxyPlot">
@@ -117,7 +122,6 @@
     <Compile Include="ViewModels\ProfilerViewModel.cs" />
     <Compile Include="ViewModels\QueryViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\RendererViewModel.cs" />
     <Compile Include="ViewModels\ReplViewModel.cs" />
     <Compile Include="ViewModels\RequestViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -154,10 +158,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Renderer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Repl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,9 +178,6 @@
   <ItemGroup>
     <Compile Include="Pages\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Renderer.xaml.cs">
-      <DependentUpon>Renderer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Statistics.xaml.cs">
       <DependentUpon>Statistics.xaml</DependentUpon>

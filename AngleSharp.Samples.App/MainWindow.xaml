@@ -17,9 +17,6 @@
                 <mui:Link DisplayName="DOM Browser"
                           Source="Pages\Browser.xaml" />
 
-                <mui:Link DisplayName="Simple renderer"
-                          Source="Pages\Renderer.xaml" />
-
                 <mui:Link DisplayName="Statistics"
                           Source="Pages\Statistics.xaml" />
 
