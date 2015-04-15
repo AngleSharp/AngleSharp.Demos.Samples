@@ -101,8 +101,9 @@
 
         PlotModel CreatePieChart(String title, Dictionary<String, Int32> data)
         {
-            var pm = new PlotModel(title);
+            var pm = new PlotModel();
             var ps = new PieSeries();
+            pm.Title = title;
             pm.PlotMargins = new OxyThickness(0);
             pm.Padding = new OxyThickness(0);
 
