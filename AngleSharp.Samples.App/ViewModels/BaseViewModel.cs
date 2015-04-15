@@ -1,5 +1,6 @@
 ﻿namespace Samples.ViewModels
 {
+    using AngleSharp;
     using System;
     using System.ComponentModel;
     using System.IO;
@@ -17,22 +18,22 @@
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
 
-        protected Uri Sanitize(String url)
+        protected Url CreateUrlFrom(String address)
         {
-            Uri uri;
+            if (File.Exists(address))
+                address = "file://localhost/" + address.Replace('\\', '/');
 
-            if (File.Exists(url))
-                url = "file://localhost/" + url.Replace('\\', '/');
-
-            var lurl = url.ToLower();
+            var lurl = address.ToLower();
 
             if (!lurl.StartsWith("file://") && !lurl.StartsWith("http://") && !lurl.StartsWith("https://"))
-                url = "http://" + url;
+                address = "http://" + address;
 
-            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
-                return uri;
+            var url = Url.Create(address);
 
-            return new Uri("http://www.google.com/search?q=" + url);
+            if (url.IsInvalid == false && url.IsAbsolute)
+                return url;
+
+            return Url.Create("http://www.google.com/search?q=" + address);
         }
     }
 }

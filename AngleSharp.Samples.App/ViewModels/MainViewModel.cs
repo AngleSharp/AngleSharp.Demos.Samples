@@ -2,8 +2,6 @@
 {
     using AngleSharp;
     using System;
-    using System.IO;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -12,7 +10,7 @@
         #region Fields
 
         readonly ITabViewModel[] views;
-        readonly EventAggregator events;
+        readonly IBrowsingContext context;
 
         Task current;
         CancellationTokenSource cts;
@@ -38,7 +36,13 @@
 
         public MainViewModel()
         {
-            events = new EventAggregator();
+            var events = new EventAggregator();
+            var config = new Configuration { Events = events }.WithCss().WithDefaultLoader(m => 
+            {
+                m.IsNavigationEnabled = true;
+                m.IsResourceLoadingEnabled = true;
+            });
+            context = BrowsingContext.New(config);
             dom = new DOMViewModel();
             profiler = new ProfilerViewModel(events);
             query = new QueryViewModel();
@@ -48,7 +52,8 @@
             tree = new TreeViewModel();
             sheets = new SheetViewModel();
             cts = new CancellationTokenSource();
-            views = new ITabViewModel[] {
+            views = new ITabViewModel[] 
+            {
                 dom,
                 query,
                 repl,
@@ -128,44 +133,27 @@
 
         public void Go()
         {
+            var url = CreateUrlFrom(address);
+
             if (current != null && !current.IsCompleted)
             {
                 cts.Cancel();
                 cts = new CancellationTokenSource();
             }
 
-            profiler.Items.Clear();
-            current = LoadAsync(address, cts.Token);
+            profiler.Reset();
+            current = LoadAsync(url, cts.Token);
         }
 
-        async Task LoadAsync(String url, CancellationToken cancel)
+        async Task LoadAsync(Url url, CancellationToken cancel)
         {
-            var response = default(Stream);
-            var http = new HttpClient();
-            var uri = Sanitize(url);
-            Status = "Loading " + uri.AbsoluteUri + " ...";
-
-            if (uri.Scheme.Equals("file", StringComparison.Ordinal))
-            {
-                response = File.Open(uri.AbsolutePath.Substring(1), FileMode.Open);
-            }
-            else
-            {
-                var request = await http.GetAsync(uri, cancel);
-                response = await request.Content.ReadAsStreamAsync();
-                cancel.ThrowIfCancellationRequested();
-            }
-
-            Status = "Parsing " + uri.AbsoluteUri + " ...";
-            var document = await DocumentBuilder.HtmlAsync(response, new Configuration(), uri.AbsoluteUri);
-            response.Close();
-
-            cancel.ThrowIfCancellationRequested();
+            Status = String.Format("Loading {0} ...", url.Href);
+            var document = await context.OpenAsync(url, cancel);
 
             foreach (var view in views)
                 view.Document = document;
 
-            Status = "Displaying: " + url;
+            Status = String.Format("Loaded {0}.", url.Href);
         }
 
         #endregion

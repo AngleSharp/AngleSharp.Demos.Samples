@@ -5,7 +5,7 @@
 
     public class TreeViewModel : BaseViewModel, ITabViewModel
     {
-        ObservableCollection<TreeNodeViewModel> nodes;
+        readonly ObservableCollection<TreeNodeViewModel> nodes;
         IDocument document;
 
         public TreeViewModel()

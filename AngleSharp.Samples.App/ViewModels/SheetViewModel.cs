@@ -1,31 +1,23 @@
 ﻿namespace Samples.ViewModels
 {
-    using AngleSharp;
     using AngleSharp.Dom;
-    using AngleSharp.Dom.Html;
-    using System;
+    using AngleSharp.Dom.Css;
     using System.Collections.ObjectModel;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public class SheetViewModel : BaseViewModel, ITabViewModel
     {
-        ObservableCollection<IElement> source;
-        IElement selected;
-        ObservableCollection<CssRuleViewModel> tree;
-        CancellationTokenSource cts;
-        Task populate;
+        readonly ObservableCollection<IStyleSheet> source;
+        readonly ObservableCollection<CssRuleViewModel> tree;
+        IStyleSheet selected;
         IDocument document;
 
         public SheetViewModel()
 	    {
-            source = new ObservableCollection<IElement>();
+            source = new ObservableCollection<IStyleSheet>();
             tree = new ObservableCollection<CssRuleViewModel>();
-            cts = new CancellationTokenSource();
 	    }
 
-        public ObservableCollection<IElement> Source
+        public ObservableCollection<IStyleSheet> Source
         {
             get { return source; }
         }
@@ -35,44 +27,22 @@
             get { return tree; }
         }
 
-        public IElement Selected
+        public IStyleSheet Selected
         {
             get { return selected; }
             set 
             {
-                selected = value;     
+                selected = value;
                 RaisePropertyChanged();
+                tree.Clear();
+                var sheet = selected as ICssStyleSheet;
 
-                if (populate != null && !populate.IsCompleted)
+                if (sheet != null)
                 {
-                    cts.Cancel();
-                    cts = new CancellationTokenSource();
+                    for (int i = 0; i < sheet.Rules.Length; i++)
+                        tree.Add(new CssRuleViewModel(sheet.Rules[i]));
                 }
-
-                populate = PopulateTree(cts.Token);
             }
-        }
-
-        async Task PopulateTree(CancellationToken token)
-        {
-            tree.Clear();
-            var content = String.Empty;
-
-            if (selected is IHtmlLinkElement)
-            {
-                var url = new Uri(document.DocumentUri);
-                var http = new HttpClient { BaseAddress = url };
-                var request = await http.GetAsync(((IHtmlLinkElement)selected).Href, cts.Token);
-                content = await request.Content.ReadAsStringAsync();
-                token.ThrowIfCancellationRequested();
-            }
-            else if (selected is IHtmlStyleElement)
-                content = ((IHtmlStyleElement)selected).TextContent;
-            
-            var css = DocumentBuilder.Css(content);
-
-            for (int i = 0; i < css.Rules.Length; i++)
-                tree.Add(new CssRuleViewModel(css.Rules[i]));
         }
 
         public IDocument Document
@@ -83,7 +53,7 @@
                 document = value;
                 source.Clear();
 
-                foreach (var sheet in document.QuerySelectorAll("link,style"))
+                foreach (var sheet in document.StyleSheets)
                     source.Add(sheet);
 
                 Selected = null;
