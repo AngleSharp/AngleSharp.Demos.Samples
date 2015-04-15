@@ -7,28 +7,24 @@
       mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
     <oxy:PlotView Title="Profiling data"
                   x:Name="plot"
-                  LegendPlacement="Outside"
-                  LegendPosition="RightTop"
+                  LegendPlacement="Inside"
+                  LegendPosition="RightBottom"
                   LegendOrientation="Vertical"
-                  Margin="0"
-                  PlotMargins="0"
-                  Padding="5"
                   Grid.Row="1"
                   Grid.Column="0"
                   Grid.ColumnSpan="2">
 
         <oxy:PlotView.Axes>
-            <oxy:CategoryAxis Position="Left"
-                              ItemsSource="{Binding Items}"
-                              LabelField="Label" />
             <oxy:LinearAxis Position="Bottom"
-                            Title="Time [ms]"
-                            MinimumPadding="0" 
-                            AbsoluteMinimum="0"/>
+                            AbsoluteMinimum="0"
+                            Minimum="0"
+                            Title="Time (ms)" />
         </oxy:PlotView.Axes>
 
         <oxy:PlotView.Series>
             <oxy:BarSeries ItemsSource="{Binding Items}"
+                           LabelPlacement="Inside"
+                           LabelFormatString="{}{Label}"
                            ColorField="Color"
                            ValueField="Value"/>
         </oxy:PlotView.Series>

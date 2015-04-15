@@ -10,7 +10,6 @@
         public Profiler()
         {
             InitializeComponent();
-            //vm.PropertyChanged += (s, e) => plot.RefreshPlot(true);
         }
     }
 }
