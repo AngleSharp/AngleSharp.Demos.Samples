@@ -1,26 +1,21 @@
 ﻿namespace Samples.ViewModels
 {
-    using AngleSharp;
     using AngleSharp.Dom;
+    using AngleSharp.Html;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Text;
     using System.Windows.Media;
 
     public class TreeNodeViewModel : BaseViewModel
     {
-        ObservableCollection<TreeNodeViewModel> children;
+        readonly ObservableCollection<TreeNodeViewModel> children;
         Boolean expanded;
         Boolean selected;
         String value;
         Brush foreground;
         TreeNodeViewModel expansionElement;
         ObservableCollection<TreeNodeViewModel> parent;
-
-        [ThreadStatic]
-        static StringBuilder buffer;
 
         TreeNodeViewModel()
         {
@@ -90,9 +85,9 @@
             if (node is IText)
                 return Create((IText)node);
             else if (node is IComment)
-                return new TreeNodeViewModel { Value = Comment(((IComment)node).Data), Foreground = Brushes.Gray };
+                return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Comment((IComment)node), Foreground = Brushes.Gray };
             else if (node is IDocumentType)
-                return new TreeNodeViewModel { Value = ((IDocumentType)node).ToHtml(), Foreground = Brushes.DarkGray };
+                return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Doctype((IDocumentType)node), Foreground = Brushes.DarkGray };
             else if(node is IElement)
                 return Create((IElement)node);
 
@@ -109,7 +104,7 @@
             if (data.Length == 0)
                 return null;
 
-            return new TreeNodeViewModel { Value = String.Join(" ", data), Foreground = Brushes.SteelBlue };
+            return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Text(text.Data), Foreground = Brushes.SteelBlue };
         }
 
         static TreeNodeViewModel Create(IElement node)
@@ -139,44 +134,14 @@
             }
         }
 
-        static StringBuilder StartString()
-        {
-            return buffer ?? (buffer = new StringBuilder());
-        }
-
-        static StringBuilder StartString(Char c)
-        {
-            return StartString().Append(c);
-        }
-
-        static StringBuilder StartString(String str)
-        {
-            return StartString().Append(str);
-        }
-
-        static String ReleaseString()
-        {
-            var s = buffer.ToString();
-            buffer.Clear();
-            return s;
-        }
-
-        static String Comment(String comment)
-        {
-            StartString("<!--").Append(comment).Append("-->");
-            return ReleaseString();
-        }
-
         static String OpenTag(IElement element)
         {
-            StartString('<').Append(element.LocalName).Append(String.Join(" ", element.Attributes.Select(m => m.ToString()))).Append('>');
-            return ReleaseString();
+            return HtmlMarkupFormatter.Instance.OpenTag(element, false);
         }
 
         static String CloseTag(IElement element)
         {
-            StartString("</").Append(element.LocalName).Append('>');
-            return ReleaseString();
+            return HtmlMarkupFormatter.Instance.CloseTag(element, false);
         }
     }
 }

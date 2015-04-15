@@ -47,7 +47,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         
-                        <TextBlock Text="{Binding TagName}"
+                        <TextBlock Text="{Binding LocalName}"
                                    Padding="5"
                                    Margin="3"
                                    Grid.Column="0" />

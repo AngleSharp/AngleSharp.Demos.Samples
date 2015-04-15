@@ -62,18 +62,14 @@
             {
                 var url = new Uri(document.DocumentUri);
                 var http = new HttpClient { BaseAddress = url };
-                //ProfilerViewModel.Data.Start("Response (CSS)", OxyPlot.OxyColors.Blue);
                 var request = await http.GetAsync(((IHtmlLinkElement)selected).Href, cts.Token);
                 content = await request.Content.ReadAsStringAsync();
-                //ProfilerViewModel.Data.Stop();
                 token.ThrowIfCancellationRequested();
             }
             else if (selected is IHtmlStyleElement)
                 content = ((IHtmlStyleElement)selected).TextContent;
             
-            //ProfilerViewModel.Data.Start("Parsing (CSS)", OxyPlot.OxyColors.Violet);
             var css = DocumentBuilder.Css(content);
-            //ProfilerViewModel.Data.Stop();
 
             for (int i = 0; i < css.Rules.Length; i++)
                 tree.Add(new CssRuleViewModel(css.Rules[i]));
