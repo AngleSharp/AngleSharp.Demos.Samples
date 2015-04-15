@@ -11,11 +11,13 @@
     {
         #region Fields
 
+        readonly ITabViewModel[] views;
+        readonly EventAggregator events;
+
         Task current;
         CancellationTokenSource cts;
         String status;
         String address;
-        ITabViewModel[] views;
 
         #endregion
 
@@ -36,8 +38,9 @@
 
         public MainViewModel()
         {
+            events = new EventAggregator();
             dom = new DOMViewModel();
-            profiler = new ProfilerViewModel();
+            profiler = new ProfilerViewModel(events);
             query = new QueryViewModel();
             repl = new ReplViewModel();
             settings = new SettingsViewModel();
@@ -131,6 +134,7 @@
                 cts = new CancellationTokenSource();
             }
 
+            profiler.Items.Clear();
             current = LoadAsync(address, cts.Token);
         }
 
@@ -143,23 +147,17 @@
 
             if (uri.Scheme.Equals("file", StringComparison.Ordinal))
             {
-                //ProfilerViewModel.Data.Start("Response (HTML)", OxyPlot.OxyColors.Red);
                 response = File.Open(uri.AbsolutePath.Substring(1), FileMode.Open);
-                //ProfilerViewModel.Data.Stop();
             }
             else
             {
-                //ProfilerViewModel.Data.Start("Response (HTML)", OxyPlot.OxyColors.Red);
                 var request = await http.GetAsync(uri, cancel);
                 response = await request.Content.ReadAsStreamAsync();
-                //ProfilerViewModel.Data.Stop();
                 cancel.ThrowIfCancellationRequested();
             }
 
             Status = "Parsing " + uri.AbsoluteUri + " ...";
-            //ProfilerViewModel.Data.Start("Parsing (HTML)", OxyPlot.OxyColors.Orange);
-            var document = DocumentBuilder.Html(response, new Configuration(), uri.AbsoluteUri);
-            //ProfilerViewModel.Data.Stop();
+            var document = await DocumentBuilder.HtmlAsync(response, new Configuration(), uri.AbsoluteUri);
             response.Close();
 
             cancel.ThrowIfCancellationRequested();

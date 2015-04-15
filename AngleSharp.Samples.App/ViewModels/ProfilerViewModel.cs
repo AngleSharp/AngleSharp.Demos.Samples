@@ -1,43 +1,52 @@
 ﻿namespace Samples.ViewModels
 {
+    using AngleSharp.Events;
+    using OxyPlot;
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
-    using System.Linq;
 
     public class ProfilerViewModel : BaseViewModel
     {
-        Collection<Item> _items;
-        Stopwatch _sw;
-        Item _tmp;
+        readonly Collection<Item> _items;
+        readonly IEventAggregator _events;
 
-        public ProfilerViewModel()
+        public ProfilerViewModel(IEventAggregator events)
         {
-            _sw = new Stopwatch();
             _items = new Collection<Item>();
+            _events = events;
+            Register<CssParseStartEvent>(m => 
+            {
+                var sw = Stopwatch.StartNew();
+                m.Ended += _ => AddItem("Parse CSS", OxyColors.Violet, sw);
+            });
+            Register<HtmlParseStartEvent>(m =>
+            {
+                var sw = Stopwatch.StartNew();
+                m.Ended += _ => AddItem("Parse HTML", OxyColors.Orange, sw);
+            });
+            Register<RequestStartEvent>(m =>
+            {
+                var sw = Stopwatch.StartNew();
+                m.Ended += _ => AddItem("Response", OxyColors.Red, sw);
+            });
+        }
+
+        void AddItem(String label, OxyColor color, Stopwatch watch)
+        {
+            watch.Stop();
+            _items.Add(new Item { Label = label, Color = color, Time = watch.Elapsed });
+        }
+
+        void Register<T>(Action<T> listener)
+        {
+            var subscriber = new Subscriber<T>(listener);
+            _events.Subscribe(subscriber);
         }
 
         public Collection<Item> Items
         {
             get { return _items; }
-        }
-
-        public void Start(String label, OxyPlot.OxyColor color)
-        {
-            _tmp = new Item { Label = label, Color = color };
-            _sw.Restart();
-        }
-
-        public void Stop()
-        {
-            _sw.Stop();
-            _tmp.Value = (Double)_sw.ElapsedMilliseconds;
-            var item = _items.Where(m => m.Label == _tmp.Label).SingleOrDefault();
-
-            if (item != null)
-                _items.Remove(item);
-
-            _items.Add(_tmp);
         }
 
         public class Item
@@ -48,13 +57,18 @@
                 set;
             }
 
-            public Double Value
+            public TimeSpan Time
             {
                 get;
                 set;
             }
 
-            public OxyPlot.OxyColor Color
+            public Double Value
+            {
+                get { return Time.Milliseconds; }
+            }
+
+            public OxyColor Color
             {
                 get;
                 set;

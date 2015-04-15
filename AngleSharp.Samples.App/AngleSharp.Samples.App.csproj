@@ -112,6 +112,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\EventAggregator.cs" />
     <Compile Include="Pages\Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
@@ -130,6 +131,7 @@
     <Compile Include="Pages\Tree.xaml.cs">
       <DependentUpon>Tree.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\Subscriber.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DOMViewModel.cs" />
     <Compile Include="ViewModels\CssRuleViewModel.cs" />
