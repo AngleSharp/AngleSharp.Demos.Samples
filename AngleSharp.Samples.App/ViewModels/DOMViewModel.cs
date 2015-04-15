@@ -1,18 +1,15 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp.Dom;
-    using System;
     using System.Collections.ObjectModel;
-    using System.Threading;
-    using System.Threading.Tasks;
 
-    public class DOMViewModel : RequestViewModel
+    public class DOMViewModel : BaseViewModel, ITabViewModel
     {
         ObservableCollection<DOMNodeViewModel> source;
+        IDocument document;
 
         public DOMViewModel ()
 	    {
-            Status = "Nothing to display ...";
             source = new ObservableCollection<DOMNodeViewModel>();
 	    }
 
@@ -30,11 +27,17 @@
             }
         }
 
-        protected override async Task Use(Uri url, IDocument document, CancellationToken cancel)
+        public IDocument Document
         {
-            Status = "Constructing the DOM ...";
-            Root = new DOMNodeViewModel(document);
-            await Task.Yield();
+            get
+            {
+                return document;
+            }
+            set
+            {
+                document = value;
+                Root = new DOMNodeViewModel(document);
+            }
         }
     }
 }

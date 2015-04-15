@@ -4,54 +4,58 @@
     using AngleSharp.Scripting.JavaScript;
     using System;
     using System.Collections.ObjectModel;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows.Input;
 
-    sealed class ReplViewModel : RequestViewModel
+    sealed class ReplViewModel : BaseViewModel, ITabViewModel
     {
-        readonly String _prompt;
-        readonly ObservableCollection<String> _items;
-        readonly JavaScriptEngine _engine;
-        IDocument _document;
-        Boolean _readOnly;
+        readonly String prompt;
+        readonly ObservableCollection<String> items;
+        readonly JavaScriptEngine engine;
+        IDocument document;
+        Boolean readOnly;
 
         public ReplViewModel()
         {
-            _readOnly = false;
-            _engine = new JavaScriptEngine();
-            _prompt = "$ ";
-            _items = new ObservableCollection<String>();
+            readOnly = false;
+            engine = new JavaScriptEngine();
+            prompt = "$ ";
+            items = new ObservableCollection<String>();
             ClearCommand = new RelayCommand(() => Clear());
             ResetCommand = new RelayCommand(() => Reset());
             ExecuteCommand = new RelayCommand(cmd => Run(cmd.ToString()));
         }
 
-        protected override async Task Use(Uri url, IDocument document, CancellationToken cancel)
-        {
-            Reset();
-            _document = document;
-            await Task.Yield();
-        }
-
         public Boolean IsReadOnly
         {
-            get { return _readOnly; }
+            get { return readOnly; }
             private set
             {
-                _readOnly = value;
+                readOnly = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public IDocument Document
+        {
+            get
+            {
+                return document;
+            }
+            set
+            {
+                Reset();
+                document = value;
             }
         }
 
         public ObservableCollection<String> Items
         {
-            get { return _items; }
+            get { return items; }
         }
 
         public String Prompt
         {
-            get { return _prompt; }
+            get { return prompt; }
         }
 
         public ICommand ClearCommand
@@ -74,27 +78,27 @@
 
         void Clear()
         {
-            _items.Clear();
+            items.Clear();
         }
 
         void Reset()
         {
-            _engine.Reset();
+            engine.Reset();
             Clear();
         }
 
         void Run(String command)
         {
-            _items.Add(_prompt + command);
-            _engine.Evaluate(command, new ScriptOptions
+            items.Add(prompt + command);
+            engine.Evaluate(command, new ScriptOptions
             {
-                Document = _document,
-                Context = _document.DefaultView
+                Document = document,
+                Context = document.DefaultView
             });
-            var lines = _engine.Result.ToString();
+            var lines = engine.Result.ToString();
 
             foreach (var line in lines.Split(new [] { "\n" }, StringSplitOptions.None))
-                _items.Add(line);
+                items.Add(line);
         }
     }
 }

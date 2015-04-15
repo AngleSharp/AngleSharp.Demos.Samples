@@ -9,20 +9,20 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class SheetViewModel : RequestViewModel
+    public class SheetViewModel : BaseViewModel, ITabViewModel
     {
         ObservableCollection<IElement> source;
         IElement selected;
-        Uri local;
         ObservableCollection<CssRuleViewModel> tree;
         CancellationTokenSource cts;
         Task populate;
+        IDocument document;
 
         public SheetViewModel()
 	    {
-            Status = "Nothing to display ...";
             source = new ObservableCollection<IElement>();
             tree = new ObservableCollection<CssRuleViewModel>();
+            cts = new CancellationTokenSource();
 	    }
 
         public ObservableCollection<IElement> Source
@@ -44,50 +44,54 @@
                 RaisePropertyChanged();
 
                 if (populate != null && !populate.IsCompleted)
+                {
                     cts.Cancel();
+                    cts = new CancellationTokenSource();
+                }
 
-                populate = PopulateTree();
+                populate = PopulateTree(cts.Token);
             }
         }
 
-        async Task PopulateTree()
+        async Task PopulateTree(CancellationToken token)
         {
             tree.Clear();
-            cts = new CancellationTokenSource();
             var content = String.Empty;
-            var token = cts.Token;
 
             if (selected is IHtmlLinkElement)
             {
-                var http = new HttpClient { BaseAddress = local };
-                ProfilerViewModel.Data.Start("Response (CSS)", OxyPlot.OxyColors.Blue);
+                var url = new Uri(document.DocumentUri);
+                var http = new HttpClient { BaseAddress = url };
+                //ProfilerViewModel.Data.Start("Response (CSS)", OxyPlot.OxyColors.Blue);
                 var request = await http.GetAsync(((IHtmlLinkElement)selected).Href, cts.Token);
                 content = await request.Content.ReadAsStringAsync();
-                ProfilerViewModel.Data.Stop();
+                //ProfilerViewModel.Data.Stop();
                 token.ThrowIfCancellationRequested();
             }
             else if (selected is IHtmlStyleElement)
                 content = ((IHtmlStyleElement)selected).TextContent;
             
-            ProfilerViewModel.Data.Start("Parsing (CSS)", OxyPlot.OxyColors.Violet);
+            //ProfilerViewModel.Data.Start("Parsing (CSS)", OxyPlot.OxyColors.Violet);
             var css = DocumentBuilder.Css(content);
-            ProfilerViewModel.Data.Stop();
+            //ProfilerViewModel.Data.Stop();
 
             for (int i = 0; i < css.Rules.Length; i++)
                 tree.Add(new CssRuleViewModel(css.Rules[i]));
         }
 
-        protected override async Task Use(Uri url, IDocument document, CancellationToken cancel)
+        public IDocument Document
         {
-            local = url;
-            Selected = null;
-            source.Clear();
-            Status = "Looking for stylesheets ...";
+            get { return document; }
+            set
+            {
+                document = value;
+                source.Clear();
 
-            foreach (var sheet in document.QuerySelectorAll("link,style"))
-                source.Add(sheet);
+                foreach (var sheet in document.QuerySelectorAll("link,style"))
+                    source.Add(sheet);
 
-            await Task.Yield();
+                Selected = null;
+            }
         }
     }
 }

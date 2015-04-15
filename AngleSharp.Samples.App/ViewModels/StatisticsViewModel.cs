@@ -9,13 +9,14 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class StatisticsViewModel : RequestViewModel
+    public class StatisticsViewModel : BaseViewModel, ITabViewModel
     {
         PlotModel mostElements;
         PlotModel mostClasses;
         PlotModel mostWords;
         PlotModel various;
         PlotModel mostAttributes;
+        IDocument document;
 
         public PlotModel MostElements
         {
@@ -67,31 +68,35 @@
             }
         }
 
-        protected override async Task Use(Uri url, IDocument document, CancellationToken cancel)
+        public IDocument Document
         {
-            var elements = new Dictionary<String, Int32>();
-            var attributes = new Dictionary<String, Int32>();
-            var classes = new Dictionary<String, Int32>();
-            var words = new Dictionary<String, Int32>();
-            var various = new Dictionary<String, Int32>();
+            get
+            {
+                return document;
+            }
+            set
+            {
+                document = value;
+                var elements = new Dictionary<String, Int32>();
+                var attributes = new Dictionary<String, Int32>();
+                var classes = new Dictionary<String, Int32>();
+                var words = new Dictionary<String, Int32>();
+                var various = new Dictionary<String, Int32>();
 
-            Status = "Gathering statistics ...";
+                various.Add("Images", document.Images.Length);
+                various.Add("Scripts", document.Scripts.Length);
+                various.Add("Stylesheets", document.StyleSheets.Length);
+                various.Add("Plugins", document.Plugins.Length);
+                various.Add("Forms", document.Forms.Length);
 
-            various.Add("Images", document.Images.Length);
-            various.Add("Scripts", document.Scripts.Length);
-            various.Add("Stylesheets", document.StyleSheets.Length);
-            various.Add("Plugins", document.Plugins.Length);
-            various.Add("Forms", document.Forms.Length);
+                Inspect(document.DocumentElement, elements, classes, attributes);
+                Words(document.DocumentElement.TextContent.ToCharArray(), words);
 
-            await Task.Run(() => Inspect(document.DocumentElement, elements, classes, attributes));
-            cancel.ThrowIfCancellationRequested();
-            await Task.Run(() => Words(document.DocumentElement.TextContent.ToCharArray(), words));
-            cancel.ThrowIfCancellationRequested();
-
-            MostElements = CreatePieChart("Most elements", elements);
-            MostClasses = CreatePieChart("Most classes", classes);
-            MostWords = CreatePieChart("Most words", words);
-            MostAttributes = CreatePieChart("Most attributes", attributes);
+                MostElements = CreatePieChart("Most elements", elements);
+                MostClasses = CreatePieChart("Most classes", classes);
+                MostWords = CreatePieChart("Most words", words);
+                MostAttributes = CreatePieChart("Most attributes", attributes);
+            }
         }
 
         PlotModel CreatePieChart(String title, Dictionary<String, Int32> data)

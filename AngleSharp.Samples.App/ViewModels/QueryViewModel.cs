@@ -4,11 +4,9 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
-    using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows.Media;
 
-    public class QueryViewModel : RequestViewModel
+    public class QueryViewModel : BaseViewModel, ITabViewModel
     {
         ObservableCollection<IElement> source;
         String query;
@@ -70,14 +68,6 @@
             get { return source; }
         }
 
-        protected override async Task Use(Uri url, IDocument document, CancellationToken cancel)
-        {
-            State = Brushes.LightGray;
-            this.document = document;
-            ChangeQuery();
-            await Task.Yield();
-        }
-
         void ChangeQuery()
         {
             if (document == null)
@@ -87,11 +77,11 @@
 
             try
             {
-                ProfilerViewModel.Data.Start("Query", OxyPlot.OxyColors.SteelBlue);
+                //ProfilerViewModel.Data.Start("Query", OxyPlot.OxyColors.SteelBlue);
                 var sw = Stopwatch.StartNew();
                 var elements = document.QuerySelectorAll(query);
                 sw.Stop();
-                ProfilerViewModel.Data.Stop();
+                //ProfilerViewModel.Data.Stop();
                 source.Clear();
 
                 foreach (var element in elements)
@@ -104,6 +94,20 @@
             catch(DomException)
             {
                 State = Brushes.LightPink;
+            }
+        }
+
+        public IDocument Document
+        {
+            get
+            {
+                return document;
+            }
+            set
+            {
+                State = Brushes.LightGray;
+                document = value;
+                ChangeQuery();
             }
         }
     }

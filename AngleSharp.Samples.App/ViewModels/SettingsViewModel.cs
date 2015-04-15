@@ -6,15 +6,7 @@
 
     public class SettingsViewModel : BaseViewModel
     {
-        static readonly SettingsViewModel instance;
-
         ObservableCollection<String> urls;
-
-
-        static SettingsViewModel()
-        {
-            instance = new SettingsViewModel();
-        }
 
         public SettingsViewModel()
         {
@@ -28,21 +20,6 @@
 
             foreach (var url in Properties.Settings.Default.TypedUrls)
                 urls.Add(url);
-        }
-
-        public static SettingsViewModel Instance
-        {
-            get { return instance; }
-        }
-
-        public Boolean IsInSharedDocumentMode
-        {
-            get { return Properties.Settings.Default.SharedMode; }
-            set
-            {
-                Properties.Settings.Default.SharedMode = value;
-                Properties.Settings.Default.Save();
-            }
         }
 
         public ObservableCollection<String> Urls
