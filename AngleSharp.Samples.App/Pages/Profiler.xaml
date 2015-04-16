@@ -5,28 +5,5 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
       mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
-    <oxy:PlotView Title="Profiling data"
-                  x:Name="plot"
-                  LegendPlacement="Inside"
-                  LegendPosition="RightBottom"
-                  LegendOrientation="Vertical"
-                  Grid.Row="1"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2">
-
-        <oxy:PlotView.Axes>
-            <oxy:LinearAxis Position="Bottom"
-                            AbsoluteMinimum="0"
-                            Minimum="0"
-                            Title="Time (ms)" />
-        </oxy:PlotView.Axes>
-
-        <oxy:PlotView.Series>
-            <oxy:BarSeries ItemsSource="{Binding Items}"
-                           LabelPlacement="Inside"
-                           LabelFormatString="{}{Label}"
-                           ColorField="Color"
-                           ValueField="Value"/>
-        </oxy:PlotView.Series>
-    </oxy:PlotView>
+    <oxy:PlotView Model="{Binding PlotData}" />
 </UserControl>
