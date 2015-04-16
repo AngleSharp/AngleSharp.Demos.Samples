@@ -89,7 +89,7 @@
                 Time = sw.ElapsedMilliseconds;
                 Result = elements.Length;
             }
-            catch(DomException)
+            catch (DomException)
             {
                 State = Brushes.LightPink;
             }
