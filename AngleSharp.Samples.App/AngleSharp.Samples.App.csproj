@@ -113,6 +113,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Events\EventAggregator.cs" />
+    <Compile Include="Pages\Errors.xaml.cs">
+      <DependentUpon>Errors.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
@@ -135,6 +138,8 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DOMViewModel.cs" />
     <Compile Include="ViewModels\CssRuleViewModel.cs" />
+    <Compile Include="ViewModels\ErrorsViewModel.cs" />
+    <Compile Include="ViewModels\IEventViewModel.cs" />
     <Compile Include="ViewModels\ITabViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProfilerViewModel.cs" />
@@ -160,6 +165,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\Browser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Errors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,6 +10,7 @@
         #region Fields
 
         readonly ITabViewModel[] views;
+        readonly IEventViewModel[] logs;
         readonly IBrowsingContext context;
 
         Task current;
@@ -29,6 +30,7 @@
         readonly StatisticsViewModel statistics;
         readonly TreeViewModel tree;
         readonly SheetViewModel sheets;
+        readonly ErrorsViewModel errors;
 
         #endregion
 
@@ -43,8 +45,9 @@
                 m.IsResourceLoadingEnabled = true;
             });
             context = BrowsingContext.New(config);
-            dom = new DOMViewModel();
             profiler = new ProfilerViewModel(events);
+            errors = new ErrorsViewModel(events);
+            dom = new DOMViewModel();
             query = new QueryViewModel();
             repl = new ReplViewModel();
             settings = new SettingsViewModel();
@@ -60,6 +63,11 @@
                 statistics,
                 tree,
                 sheets
+            };
+            logs = new IEventViewModel[]
+            {
+                profiler,
+                errors
             };
         }
 
@@ -148,6 +156,10 @@
         async Task LoadAsync(Url url, CancellationToken cancel)
         {
             Status = String.Format("Loading {0} ...", url.Href);
+
+            foreach (var log in logs)
+                log.Reset();
+
             var document = await context.OpenAsync(url, cancel);
 
             foreach (var view in views)
