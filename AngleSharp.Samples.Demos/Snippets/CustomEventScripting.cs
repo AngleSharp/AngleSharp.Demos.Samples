@@ -10,11 +10,8 @@
         public async Task Run()
 #pragma warning restore CS1998
         {
-            // We require a custom configuration
-            var config = new Configuration();
-
-            // Including the scripting
-            config.WithJavaScript();
+            // We require a custom configuration with JavaScript
+            var config = new Configuration().WithJavaScript();
 
             // This is our sample source, we will trigger the load event
             var source = @"<!doctype html>

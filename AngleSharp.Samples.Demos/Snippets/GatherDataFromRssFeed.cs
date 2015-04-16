@@ -6,11 +6,21 @@
 
     class GatherDataFromRssFeed : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
-            var feed = DocumentBuilder.Html(new Uri("http://www.florian-rappl.de/RSS"));
+            // We create a new configuration with the default loader
+            var config = new Configuration().WithDefaultLoader();
+
+            // We create a new context
+            var context = BrowsingContext.New(config);
+
+            // The address we want to use
+            var address = Url.Create("http://www.florian-rappl.de/RSS");
+
+            // We load the feed
+            var feed = await context.OpenAsync(address);
+
+            // We query the desired items
             var items = feed.QuerySelectorAll("item").Select(m => new
             {
                 Updated = DateTime.Parse(m.GetElementsByTagName("a10:updated").First().TextContent),

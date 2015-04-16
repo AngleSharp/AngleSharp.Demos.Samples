@@ -1,27 +1,29 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
-    using AngleSharp.Scripting.JavaScript;
     using System;
     using System.Threading.Tasks;
 
     // Not used at the moment (wait for more to be integrated)
     class Html5Test// : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
-            // We require a custom configuration
-            var config = new Configuration();
+            // We require a custom configuration with JavaScript, CSS and the default loader
+            var config = new Configuration().WithJavaScript().WithCss().WithDefaultLoader();
 
-            // Including the scripting
-            config.WithJavaScript();
+            // We create a new context
+            var context = BrowsingContext.New(config);
 
-            // Including the styling
-            config.WithCss();
+            // The address we want to use
+            var address = Url.Create("http://html5test.com");
 
-            var document = DocumentBuilder.Html(new Uri("http://html5test.com/"), config);
+            // Load the document
+            var document = await context.OpenAsync(address);
+
+            // Get the scored points
             var points = document.QuerySelector("#score > .pointsPanel > h2 > strong").TextContent;
+
+            // Print it out
             Console.WriteLine("AngleSharp received {0} points form HTML5Test.com", points);
         }
     }
