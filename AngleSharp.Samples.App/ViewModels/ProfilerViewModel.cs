@@ -31,7 +31,7 @@
             Register<RequestStartEvent>(m =>
             {
                 var start = _time.Elapsed;
-                m.Ended += _ => AddItem("Response " + _.Address, OxyColors.Red, start, _time.Elapsed);
+                m.Ended += _ => AddItem((_ != null ? "Response " + _.Address.Href : "No response"), OxyColors.Red, start, _time.Elapsed);
             });
         }
 

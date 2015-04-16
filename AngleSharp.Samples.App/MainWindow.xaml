@@ -55,6 +55,9 @@
             <TabItem Header="Profiler">
                 <Pages:Profiler DataContext="{Binding Profiler}" />
             </TabItem>
+            <TabItem Header="Errors">
+                <Pages:Errors DataContext="{Binding Errors}" />
+            </TabItem>
         </TabControl>
         <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
                    Text="{Binding Status}"

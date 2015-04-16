@@ -80,6 +80,11 @@
             get { return dom; }
         }
 
+        public ErrorsViewModel Errors
+        {
+            get { return errors; }
+        }
+
         public ProfilerViewModel Profiler
         {
             get { return profiler; }

@@ -4,8 +4,85 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="ListBox"
+               x:Key="ListStyle" 
+               BasedOn="{StaticResource {x:Type ListBox}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" 
+                             Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock TextAlignment="Center"
+                                           Text="Yippie, no errors!" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-    <Grid>
-        
-    </Grid>
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="HTML" 
+                       Foreground="DarkOrange"
+                       FontSize="32" />
+            <ListBox ItemsSource="{Binding Html}"
+                     Style="{StaticResource ListStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0 4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding Position}"
+                                       Grid.Row="0"
+                                       Foreground="DarkGray"
+                                       TextAlignment="Left"/>
+                            <TextBlock Text="{Binding Code, StringFormat=Code {0}}"
+                                       FontWeight="Bold"
+                                       Foreground="DarkGray"
+                                       Grid.Row="0"
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding Message}"
+                                       Grid.Row="1" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Text="CSS"
+                       Foreground="CornflowerBlue"
+                       FontSize="32" />
+            <ListBox ItemsSource="{Binding Css}"
+                     Style="{StaticResource ListStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0 4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding Position}"
+                                       Grid.Row="0"
+                                       Foreground="DarkGray"
+                                       TextAlignment="Left"/>
+                            <TextBlock Text="{Binding Code, StringFormat=Code {0}}"
+                                       FontWeight="Bold"
+                                       Foreground="DarkGray"
+                                       Grid.Row="0"
+                                       TextAlignment="Right" />
+                            <TextBlock Text="{Binding Message}"
+                                       Grid.Row="1" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
