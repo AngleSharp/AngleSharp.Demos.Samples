@@ -80,6 +80,54 @@ These demos can be run via the command line. The executable supports some comman
 
 Since AngleSharp is built around async and console applications are usually very synchronous by nature, the demos are actually run all run in a fashion to block the execution thread. This way the samples can also be invoked incrementally without any problems.
 
+### Construction
+
+This sample shows how we can use AngleSharp to construct and populate a valid HTML document according to our needs. In the end we serialize the DOM tree to a string representation.
+
+### Create ToC
+
+Very extensive sample that takes an arbitrary input page and tries to create a table of contents form the headers in the document. This sample has been made for articles published on the CodeProject, but it can be very easily customized for any other requirements.
+
+### Custom Event Scripting
+
+Here we use the JavaScript bindings of `AngleSharp.Scripting.JavaScript` to showcase how custom DOM events are dispatched. We will receive the custom event with an event handler attached via JavaScript and C#. The whole sample would of course also work without JavaScript, but it is always nice to show two things in a single example.
+
+### Error Handling
+
+AngleSharp has been build following the HTML 5.1 specification. This also embodies the rich HTML 5 error handling. A lot of constructs are totally fine and legalized by the HTML 5 parser. The example shows the Google error page, which is totally valid HTML (5) and can be parsed perfectly correct with AngleSharp.
+
+### Extended Scripting
+
+Another example that makes use of AngleSharp's JavaScript bindings. Jint allows JavaScript codes to use patterns such as the IIFE (immediately invoked function expression), which prevents pollution of the global scope. The presented script removes itself from the DOM and also changes other parts of the document.
+
+### First Example
+
+This is something like a simple "Hello World" for AngleSharp. The sample parses a very simple HTML string and outputs the document. It then adds another element to the document and outputs the (now modified) document again.
+
+### Gather Data from RSS Feed
+
+We can also use AngleSharp to bring the HTML DOM to XML documents. AngleSharp is not excellent at XML (no validation, no DTD), but it is good enough to build a completely valid tree, which can be queried and manipulated just like normal HTML.
+
+### HTML5 Test
+
+The HTML5 Test sample is currently not included in the suite. It will be included at a later stage, when the JavaScript bindings are good enough to deal with the JavaScript code, which can be found at the HTML5Test.com webpage. It will be interesting to see how many points AngleSharp can score (even without drawing and multimedia capabilities, which make most of the points).
+
+### Legacy Event Scripting
+
+The legacy event scripting sample shows that AngleSharp's JavaScript bindings also allow setting the event handler in a classic way, i.e. without using `addEventListener`.
+
+### Simple Scripting
+
+The most trivial example to show the scripting bindings in AngleSharp. We change the title of the document and add another span by using the infamous `write` method of the `document`. The world would be a better place without this method, however, AngleSharp needs to support it.
+
+### Single Element
+
+What can we learn from a single element retrieved via `QuerySelector`? Actually a lot. The sample just emphasizes on a few aspects. Mainly special C# methods such as `ToHtml`, `Text` and DOM properties such as `InnerHtml`, `OuterHtml` and `TextContent`.
+
+### Using LINQ
+
+AngleSharp is very LINQ friendly. Every collection implements at least an `IEnumerable<T>` interface. We can use this to improve the DOM query with C# statements.
+
 ## License
 
 The MIT License (MIT)
