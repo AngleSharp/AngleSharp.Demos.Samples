@@ -16,14 +16,6 @@ The DOM view represents the basic DOM methods and properties in a view similar t
 
 The sample is great for learning how to use the published DOM API. It can be easily adjusted to output the original .NET method names instead of the adjusted ones, which match the official naming as specified by the W3C.
 
-### Console
-
-This is a very simple example of using the `AngleSharp.Scripting.JavaScript` library. It uses Jint to create JavaScript bindings to the published API. Please note that the sample app does not use JavaScript actively. JavaScript is only active in this console view. Hence no JavaScript is loaded or executed on the page.
-
-![AngleSharp Console](https://raw.githubusercontent.com/AngleSharp/AngleSharp.Samples/master/images/console.png)
-
-The code uses a 3rd party WPF control called Terminal. This control is a little bit buggy and sometimes may refuse to alter input. If you have a better suggestion or know the problem, then please contribute.
-
 ### Queries
 
 One of the best things about AngleSharp is the integrated support for queries via `QuerySelector` and `QuerySelectorAll`. This sample provides the user with a textbox that allows input of arbitrary queries. The query is executed and the result is then displayed. Due to WPFs overhead the displaying takes usually a lot longer than the query itself. The time for the query is also portrayed in the upper right corner.
@@ -31,6 +23,14 @@ One of the best things about AngleSharp is the integrated support for queries vi
 ![AngleSharp Queries](https://raw.githubusercontent.com/AngleSharp/AngleSharp.Samples/master/images/queries.png)
 
 Invalid queries result in a `DomException`, as we would see it in a browser. The sample catches these exceptions and sets the background of the input box to a red to indicate the failure.
+
+### Console
+
+This is a very simple example of using the `AngleSharp.Scripting.JavaScript` library. It uses Jint to create JavaScript bindings to the published API. Please note that the sample app does not use JavaScript actively. JavaScript is only active in this console view. Hence no JavaScript is loaded or executed on the page.
+
+![AngleSharp Console](https://raw.githubusercontent.com/AngleSharp/AngleSharp.Samples/master/images/console.png)
+
+The code uses a 3rd party WPF control called Terminal. This control is a little bit buggy and sometimes may refuse to alter input. If you have a better suggestion or know the problem, then please contribute.
 
 ### Sheets
 
