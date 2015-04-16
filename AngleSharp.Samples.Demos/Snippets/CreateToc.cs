@@ -9,10 +9,9 @@
 
     class CreateToc : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
+            // Preamble for interactivity
             Console.WriteLine("Enter (full) url to use (or enter to skip):");
             var address = Console.ReadLine();
             var url = Url.Create(address);
@@ -23,8 +22,11 @@
                 return;
             }
 
+            // Create a new configuration and include the default loader
+            var config = new Configuration().WithDefaultLoader();
+
             // Create a new context
-            var context = BrowsingContext.New(new Configuration().WithDefaultLoader());
+            var context = BrowsingContext.New(config);
 
             // Load the event
             var document = await context.OpenAsync(url);
@@ -36,7 +38,7 @@
             var toc = CreateEntries(document, headers);
 
             // Output the resulting DOM for the ToC
-            Console.WriteLine(toc.OuterHtml);
+            Console.WriteLine(toc.ToHtml());
         }
 
         static IHtmlOrderedListElement CreateEntries(IDocument document, IElement[] headers)
@@ -56,7 +58,8 @@
                 var subHeaders = new List<IElement>();
 
                 // As long as we don't see the original header level we'll collect the sub headers
-                while (i + subHeaders.Count + 1 < headers.Length && headers[i].LocalName != headers[i + subHeaders.Count + 1].LocalName)
+                while (i + subHeaders.Count + 1 < headers.Length && 
+                       headers[i].LocalName != headers[i + subHeaders.Count + 1].LocalName)
                 {
                     subHeaders.Add(headers[i + 1 + subHeaders.Count]);
                 }
