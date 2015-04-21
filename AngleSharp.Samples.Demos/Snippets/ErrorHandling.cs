@@ -5,9 +5,7 @@
 
     class ErrorHandling : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             // The original source, see
             // http://www.google.com/error
@@ -25,10 +23,10 @@
   <p>The requested URL <code>/error</code> was not found on this server.  <ins>That’s all we know.</ins>";
 
             // Just get the DOM representation
-            var doc = DocumentBuilder.Html(source);
+            var document = await BrowsingContext.New().OpenAsync(m => m.Content(source));
 
             // Serialize it back to the console
-            Console.WriteLine(doc.DocumentElement.OuterHtml);
+            Console.WriteLine(document.DocumentElement.OuterHtml);
         }
     }
 }

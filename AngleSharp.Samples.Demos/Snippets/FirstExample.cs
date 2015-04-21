@@ -5,12 +5,10 @@
 
     class FirstExample : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             // Create a new document from the given source
-            var document = DocumentBuilder.Html("<h1>Some example source</h1><p>This is a paragraph element");
+            var document = await BrowsingContext.New().OpenAsync(m => m.Content("<h1>Some example source</h1><p>This is a paragraph element"));
 
             // Do something with document like the following
             Console.WriteLine("Serializing the (original) document:");

@@ -6,12 +6,11 @@
 
     class SingleElements : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             // Create a new document from the given source
-            var document = DocumentBuilder.Html("<b><i>This is some <em> bold <u>and</u> italic </em> text!</i></b>");
+            var document = await BrowsingContext.New().OpenAsync(m => 
+                m.Content("<b><i>This is some <em> bold <u>and</u> italic </em> text!</i></b>"));
             var emphasize = document.QuerySelector("em");
 
             Console.WriteLine("Difference between several ways of getting text:");

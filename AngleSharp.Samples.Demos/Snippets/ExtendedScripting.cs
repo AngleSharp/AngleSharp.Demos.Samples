@@ -5,9 +5,7 @@
 
     class ExtendedScripting : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             //We require a custom configuration with JavaScript and CSS
             var config = new Configuration().WithJavaScript().WithCss();
@@ -47,7 +45,7 @@ div {
 })();
 </script>
 </body>";
-            var document = DocumentBuilder.Html(source, config);
+            var document = await BrowsingContext.New(config).OpenAsync(m => m.Content(source));
 
             // HTML will have changed completely (e.g., no more script element)
             Console.WriteLine(document.DocumentElement.OuterHtml);

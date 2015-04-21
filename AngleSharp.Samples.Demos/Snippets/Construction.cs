@@ -6,12 +6,10 @@
 
     class Construction : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             // Create empty document
-            var document = DocumentBuilder.Html(String.Empty);
+            var document = await BrowsingContext.New().OpenAsync(m => m.Content(String.Empty));
 
             // Set title
             document.Title = "My document";

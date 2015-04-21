@@ -5,9 +5,7 @@
 
     class LegacyEventScripting : ISnippet
     {
-#pragma warning disable CS1998
         public async Task Run()
-#pragma warning restore CS1998
         {
             // We require a custom configuration with JavaScript
             var config = new Configuration().WithJavaScript();
@@ -27,7 +25,7 @@ document.onload = function() {
 console.log('After setting the handler via onload!');
 </script>
 </body>";
-            var document = DocumentBuilder.Html(source, config);
+            var document = await BrowsingContext.New(config).OpenAsync(m => m.Content(source));
 
             // HTML should be output in the end
             Console.WriteLine(document.DocumentElement.OuterHtml);
