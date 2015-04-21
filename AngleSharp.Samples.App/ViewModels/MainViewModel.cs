@@ -39,7 +39,7 @@
         public MainViewModel()
         {
             var events = new EventAggregator();
-            var config = new Configuration { Events = events }.WithCss().WithDefaultLoader(m => 
+            var config = new Configuration(events: events).WithCss().WithDefaultLoader(m => 
             {
                 m.IsNavigationEnabled = true;
                 m.IsResourceLoadingEnabled = true;
