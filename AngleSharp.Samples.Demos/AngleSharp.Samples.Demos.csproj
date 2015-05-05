@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Snippets\BigBang.cs" />
     <Compile Include="Snippets\Construction.cs" />
     <Compile Include="Snippets\CreateToc.cs" />
     <Compile Include="Snippets\CustomEventScripting.cs" />
