@@ -18,12 +18,18 @@
 
         static void Main(String[] args)
         {
+            var snippets = FindSnippets().Select(m => new
+            {
+                Name = m.GetType().Name,
+                Run = (Func<Task>)m.Run
+            }).ToList();
             var defaults = new
             {
                 pause = false,
-                clear = false
+                clear = false,
+                //selected = new[] { "CustomEventScripting" },
+                selected = snippets.Select(m => m.Name).ToArray(),
             };
-            var snippets = FindSnippets().ToList();
             var usepause = args.Contains("-p") || args.Contains("--pause") || defaults.pause;
             var clearscr = args.Contains("-c") || args.Contains("--clear") || defaults.clear;
             var pause = Switch(usepause, PauseConsole);
@@ -33,15 +39,18 @@
             {
                 foreach (var snippet in snippets)
                 {
-                    Console.WriteLine(">>> {0}", snippet.GetType().Name);
-                    Console.WriteLine();
+                    if (defaults.selected.Contains(snippet.Name))
+                    {
+                        Console.WriteLine(">>> {0}", snippet.Name);
+                        Console.WriteLine();
 
-                    await snippet.Run();
+                        await snippet.Run();
 
-                    Console.WriteLine();
+                        Console.WriteLine();
 
-                    pause();
-                    clear();
+                        pause();
+                        clear();
+                    }
                 }
             });
         }
