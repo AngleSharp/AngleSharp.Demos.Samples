@@ -10,31 +10,25 @@
         readonly String typeName;
         readonly String name;
 
-        private CssRuleViewModel(String typeName)
+        private CssRuleViewModel(Type type)
         {
             this.children = new ObservableCollection<CssRuleViewModel>();
-            this.typeName = typeName;
+            this.typeName = type.Name;
         }
 
         private CssRuleViewModel(Object o)
-            : this(o.GetType().Name)
+            : this(o.GetType())
         {
         }
 
         private CssRuleViewModel(String name, String value)
-            : this(name, new PseudoValue(value))
-        {
-        }
-
-        private CssRuleViewModel(String name, ICssValue value)
-            : this("CSSProperty")
         {
             this.name = name;
             this.children.Add(new CssRuleViewModel(value));
         }
 
         public CssRuleViewModel(ICssRule rule)
-            : this((Object)rule)
+            : this(rule.GetType())
         {
             switch (rule.Type)
             {
@@ -91,11 +85,13 @@
         {
         }
 
-        public CssRuleViewModel(ICssValue value)
-            : this("CSSValue")
+        public CssRuleViewModel(String value)
+            : this(typeof(CSSValue))
         {
-            name = value.CssText;
+            name = value;
         }
+
+        struct CSSValue { }
 
         void Populate(ICssFontFaceRule font)
         {
@@ -140,25 +136,6 @@
         public ObservableCollection<CssRuleViewModel> Children
         {
             get { return children; }
-        }
-
-        class PseudoValue : ICssValue
-        {
-            public PseudoValue(String value)
-            {
-                CssText = value;
-            }
-
-            public CssValueType Type
-            {
-                get { return CssValueType.Custom; }
-            }
-
-            public String CssText
-            {
-                get;
-                private set;
-            }
         }
     }
 }

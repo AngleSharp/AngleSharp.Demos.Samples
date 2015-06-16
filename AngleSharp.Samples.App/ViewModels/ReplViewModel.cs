@@ -1,8 +1,8 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp.Dom;
-    using AngleSharp.Scripting;
     using AngleSharp.Scripting.JavaScript;
+    using AngleSharp.Services.Scripting;
     using System;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
