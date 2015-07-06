@@ -30,7 +30,7 @@
             : this()
         {
             this.name = name;
-            this.typeName = "CSSProperty";
+            this.typeName = "CssProperty";
             this.children.Add(new CssRuleViewModel(value));
         }
 
@@ -93,12 +93,11 @@
         }
 
         public CssRuleViewModel(String value)
-            : this(typeof(CSSValue))
+            : this()
         {
             name = value;
+            typeName = "CssValue";
         }
-
-        struct CSSValue { }
 
         void Populate(ICssFontFaceRule font)
         {
