@@ -16,8 +16,10 @@
 
         public void Publish<TEvent>(TEvent data)
         {
-            foreach (var subscriber in subscribers.OfType<ISubscriber<TEvent>>())
-                subscriber.OnEventData(data);
+            var subscriber = subscribers.OfType<ISubscriber<TEvent>>().ToArray();
+
+            for (var i = 0; i < subscriber.Length; i++)
+                subscriber[i].OnEventData(data);
         }
 
         public void Subscribe<TEvent>(ISubscriber<TEvent> listener)
