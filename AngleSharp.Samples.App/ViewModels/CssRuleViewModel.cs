@@ -10,9 +10,14 @@
         readonly String typeName;
         readonly String name;
 
-        private CssRuleViewModel(Type type)
+        private CssRuleViewModel()
         {
             this.children = new ObservableCollection<CssRuleViewModel>();
+        }
+
+        private CssRuleViewModel(Type type)
+            : this()
+        {
             this.typeName = type.Name;
         }
 
@@ -22,8 +27,10 @@
         }
 
         private CssRuleViewModel(String name, String value)
+            : this()
         {
             this.name = name;
+            this.typeName = "CSSProperty";
             this.children.Add(new CssRuleViewModel(value));
         }
 
