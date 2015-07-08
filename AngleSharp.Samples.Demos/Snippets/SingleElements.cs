@@ -1,7 +1,7 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
+    using AngleSharp.Extensions;
     using System;
-    using AngleSharp.Linq;
     using System.Threading.Tasks;
 
     class SingleElements : ISnippet

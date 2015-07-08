@@ -1,6 +1,5 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
-    using AngleSharp.Scripting.JavaScript;
     using System;
     using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@
         public async Task Run()
         {
             // We require a custom configuration with JavaScript
-            var config = new Configuration().WithJavaScript();
+            var config = Configuration.Default.WithJavaScript();
 
             // This is our sample source, we will trigger the load event
             var source = @"<!doctype html>

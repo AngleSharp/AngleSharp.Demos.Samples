@@ -1,8 +1,8 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
+    using AngleSharp.Extensions;
     using System;
     using System.Linq;
-    using AngleSharp.Linq;
     using System.Threading.Tasks;
 
     class UsingLinq : ISnippet

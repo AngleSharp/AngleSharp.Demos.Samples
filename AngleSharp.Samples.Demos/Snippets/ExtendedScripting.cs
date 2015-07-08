@@ -8,7 +8,9 @@
         public async Task Run()
         {
             //We require a custom configuration with JavaScript and CSS
-            var config = new Configuration().WithJavaScript().WithCss();
+            var config = Configuration.Default
+                                      .WithJavaScript()
+                                      .WithCss();
 
             // This is our sample source, we will do some DOM manipulation
             var source = @"<!doctype html>

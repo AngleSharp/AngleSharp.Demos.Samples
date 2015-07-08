@@ -1,11 +1,12 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
+    using AngleSharp.Dom;
+    using AngleSharp.Dom.Html;
+    using AngleSharp.Extensions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using AngleSharp.Dom;
-    using AngleSharp.Dom.Html;
 
     class CreateToc : ISnippet
     {
@@ -23,7 +24,7 @@
             }
 
             // Create a new configuration and include the default loader
-            var config = new Configuration().WithDefaultLoader();
+            var config = Configuration.Default.WithDefaultLoader();
 
             // Create a new context
             var context = BrowsingContext.New(config);

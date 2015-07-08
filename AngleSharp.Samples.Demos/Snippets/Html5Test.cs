@@ -9,7 +9,10 @@
         public async Task Run()
         {
             // We require a custom configuration with JavaScript, CSS and the default loader
-            var config = new Configuration().WithJavaScript().WithCss().WithDefaultLoader();
+            var config = Configuration.Default
+                                      .WithJavaScript()
+                                      .WithCss()
+                                      .WithDefaultLoader();
 
             // We create a new context
             var context = BrowsingContext.New(config);

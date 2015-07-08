@@ -9,7 +9,7 @@
         public async Task Run()
         {
             // We create a new configuration with the default loader
-            var config = new Configuration().WithDefaultLoader();
+            var config = Configuration.Default.WithDefaultLoader();
 
             // We create a new context
             var context = BrowsingContext.New(config);
