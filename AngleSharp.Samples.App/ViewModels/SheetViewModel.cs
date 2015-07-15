@@ -2,11 +2,8 @@
 {
     using AngleSharp.Dom;
     using AngleSharp.Dom.Css;
-    using AngleSharp.Dom.Html;
-    using AngleSharp;
-    using System.Collections.ObjectModel;
     using AngleSharp.Events;
-    using System.Windows.Threading;
+    using System.Collections.ObjectModel;
 
     public class SheetViewModel : BaseViewModel, ITabViewModel, ISubscriber<CssParseStartEvent>
     {
@@ -73,9 +70,9 @@
 
         void ISubscriber<CssParseStartEvent>.OnEventData(CssParseStartEvent data)
         {
-            data.Ended += sheet =>
+            data.Ended += (s, e) =>
             {
-                App.Current.Dispatcher.Invoke(() => source.Add(sheet));
+                App.Current.Dispatcher.Invoke(() => source.Add(data.StyleSheet));
             };
         }
     }

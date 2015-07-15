@@ -21,17 +21,17 @@
             Register<CssParseStartEvent>(m =>
             {
                 var start = _time.Elapsed;
-                m.Ended += _ => AddItem("Parse CSS " + _.Href, OxyColors.Violet, start, _time.Elapsed);
+                m.Ended += (s, e) => AddItem("Parse CSS " + m.StyleSheet.Href, OxyColors.Violet, start, _time.Elapsed);
             });
             Register<HtmlParseStartEvent>(m =>
             {
                 var start = _time.Elapsed;
-                m.Ended += _ => AddItem("Parse HTML " + _.Url, OxyColors.Orange, start, _time.Elapsed);
+                m.Ended += (s, e) => AddItem("Parse HTML " + m.Document.Url, OxyColors.Orange, start, _time.Elapsed);
             });
             Register<RequestStartEvent>(m =>
             {
                 var start = _time.Elapsed;
-                m.Ended += _ => AddItem((_ != null ? "Response " + _.Address.Href : "No response"), OxyColors.Red, start, _time.Elapsed);
+                m.Ended += (s, e) => AddItem("Request for " + m.Request.Address.Href, OxyColors.Red, start, _time.Elapsed);
             });
         }
 
