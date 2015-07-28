@@ -45,9 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AngleSharp.0.8.7.1\lib\net45\AngleSharp.dll</HintPath>
     </Reference>
-    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.1.6.39665, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.2.0.20733, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.1.6\lib\net45\AngleSharp.Scripting.JavaScript.dll</HintPath>
+      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.2.0\lib\net45\AngleSharp.Scripting.JavaScript.dll</HintPath>
     </Reference>
     <Reference Include="Jint, Version=2.5.0.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
