@@ -22,7 +22,6 @@
             prompt = "$ ";
             items = new ObservableCollection<String>();
             ClearCommand = new RelayCommand(() => Clear());
-            ResetCommand = new RelayCommand(() => Reset());
             ExecuteCommand = new RelayCommand(cmd => Run(cmd.ToString()));
         }
 
@@ -38,15 +37,8 @@
 
         public IDocument Document
         {
-            get
-            {
-                return document;
-            }
-            set
-            {
-                Reset();
-                document = value;
-            }
+            get { return document; }
+            set { document = value; Clear(); }
         }
 
         public ObservableCollection<String> Items
@@ -82,12 +74,6 @@
             items.Clear();
         }
 
-        void Reset()
-        {
-            engine.Reset();
-            Clear();
-        }
-
         void Run(String command)
         {
             items.Add(prompt + command);
@@ -96,9 +82,10 @@
                 Document = document,
                 Context = document.DefaultView
             });
-            var lines = engine.Result.ToString();
 
-            foreach (var line in lines.Split(new [] { "\n" }, StringSplitOptions.None))
+            var lines = engine.GetJint(document).GetCompletionValue().ToString();
+
+            foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
                 items.Add(line);
         }
     }
