@@ -25,7 +25,7 @@
 
             var lurl = address.ToLower();
 
-            if (!lurl.StartsWith("file://") && !lurl.StartsWith("http://") && !lurl.StartsWith("https://"))
+            if (!lurl.StartsWith("file://") && !lurl.StartsWith("http://") && !lurl.StartsWith("https://") && !lurl.StartsWith("data:"))
                 address = "http://" + address;
 
             var url = Url.Create(address);

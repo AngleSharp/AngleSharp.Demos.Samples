@@ -1,6 +1,8 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp;
+    using AngleSharp.Network;
+    using AngleSharp.Network.Default;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -39,11 +41,12 @@
         public MainViewModel()
         {
             var events = new EventAggregator();
+            var requester = new IRequester[] { new DataRequester(), new HttpRequester() };
             var config = new Configuration(events: events).WithCss().WithDefaultLoader(m => 
             {
                 m.IsNavigationEnabled = true;
                 m.IsResourceLoadingEnabled = true;
-            });
+            }, requester);
             context = BrowsingContext.New(config);
             profiler = new ProfilerViewModel(events);
             errors = new ErrorsViewModel(events);
