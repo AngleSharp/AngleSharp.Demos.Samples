@@ -3,6 +3,7 @@
     using AngleSharp.Dom;
     using AngleSharp.Scripting.JavaScript;
     using AngleSharp.Services.Scripting;
+    using Jint.Runtime;
     using System;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
@@ -77,16 +78,24 @@
         void Run(String command)
         {
             items.Add(prompt + command);
-            engine.Evaluate(command, new ScriptOptions
+
+            try
             {
-                Document = document,
-                Context = document.DefaultView
-            });
+                engine.Evaluate(command, new ScriptOptions
+                {
+                    Document = document,
+                    Context = document.DefaultView
+                });
 
-            var lines = engine.GetJint(document).GetCompletionValue().ToString();
+                var lines = engine.GetJint(document).GetCompletionValue().ToString();
 
-            foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
-                items.Add(line);
+                foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
+                    items.Add(line);
+            }
+            catch (JavaScriptException ex)
+            {
+                items.Add(ex.Error.ToString());
+            }
         }
     }
 }
