@@ -1,39 +1,48 @@
 ﻿namespace Samples.ViewModels
 {
-    using AngleSharp.Events;
+    using AngleSharp;
+    using AngleSharp.Dom.Events;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     class ErrorsViewModel : BaseViewModel, IEventViewModel
     {
-        readonly IEventAggregator _events;
-        readonly ObservableCollection<CssParseErrorEvent> _cssErrors;
-        readonly ObservableCollection<HtmlParseErrorEvent> _htmlErrors;
+        readonly IBrowsingContext _context;
+        readonly ObservableCollection<CssErrorEvent> _cssErrors;
+        readonly ObservableCollection<HtmlErrorEvent> _htmlErrors;
 
-        public ErrorsViewModel(IEventAggregator events)
+        public ErrorsViewModel(IBrowsingContext context)
         {
-            _events = events;
-            _cssErrors = new ObservableCollection<CssParseErrorEvent>();
-            _htmlErrors = new ObservableCollection<HtmlParseErrorEvent>();
-            Register<CssParseErrorEvent>(m => App.Current.Dispatcher.Invoke(() => _cssErrors.Add(m)));
-            Register<HtmlParseErrorEvent>(m => App.Current.Dispatcher.Invoke(() => _htmlErrors.Add(m)));
+            _context = context;
+            _cssErrors = new ObservableCollection<CssErrorEvent>();
+            _htmlErrors = new ObservableCollection<HtmlErrorEvent>();
+            Register<CssErrorEvent>(m => App.Current.Dispatcher.Invoke(() => _cssErrors.Add(m)));
+            Register<HtmlErrorEvent>(m => App.Current.Dispatcher.Invoke(() => _htmlErrors.Add(m)));
         }
 
-        public IEnumerable<CssParseErrorEvent> Css
+        public IEnumerable<CssErrorEvent> Css
         {
             get { return _cssErrors; }
         }
 
-        public IEnumerable<HtmlParseErrorEvent> Html
+        public IEnumerable<HtmlErrorEvent> Html
         {
             get { return _htmlErrors; }
         }
 
         void Register<T>(Action<T> listener)
+            where T : Event
         {
-            var subscriber = new Subscriber<T>(listener);
-            _events.Subscribe(subscriber);
+            _context.ParseError += (obj, ev) =>
+            {
+                var data = ev as T;
+
+                if (data != null)
+                {
+                    listener.Invoke(data);
+                }
+            };
         }
 
         public void Reset()

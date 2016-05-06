@@ -1,38 +1,31 @@
 ﻿namespace Samples.ViewModels
 {
-    using AngleSharp.Events;
+    using AngleSharp;
+    using AngleSharp.Dom.Events;
     using OxyPlot;
     using OxyPlot.Axes;
     using OxyPlot.Series;
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
 
     public class ProfilerViewModel : BaseViewModel, IEventViewModel
     {
-        readonly IEventAggregator _events;
         readonly Stopwatch _time;
+        readonly Dictionary<Object, TimeSpan> _tracker;
+        readonly IBrowsingContext _context;
         readonly PlotModel _model;
 
-        public ProfilerViewModel(IEventAggregator events)
+        public ProfilerViewModel(IBrowsingContext context)
         {
             _time = new Stopwatch();
-            _events = events;
+            _tracker = new Dictionary<Object, TimeSpan>();
+            _context = context;
             _model = CreateModel();
-            Register<CssParseStartEvent>(m =>
-            {
-                var start = _time.Elapsed;
-                m.Ended += (s, e) => AddItem("Parse CSS " + m.StyleSheet.Href, OxyColors.Violet, start, _time.Elapsed);
-            });
-            Register<HtmlParseStartEvent>(m =>
-            {
-                var start = _time.Elapsed;
-                m.Ended += (s, e) => AddItem("Parse HTML " + m.Document.Url, OxyColors.Orange, start, _time.Elapsed);
-            });
-            Register<RequestStartEvent>(m =>
-            {
-                var start = _time.Elapsed;
-                m.Ended += (s, e) => AddItem("Request for " + m.Request.Address.Href, OxyColors.Red, start, _time.Elapsed);
-            });
+            _context.Parsing += TrackParsing;
+            _context.Parsed += TrackParsed;
+            _context.Requesting += TrackRequesting;
+            _context.Requested += TrackRequested;
         }
 
         static PlotModel CreateModel()
@@ -45,6 +38,18 @@
             model.Axes.Add(valueAxis);
             model.Series.Add(series);
             return model;
+        }
+
+        public PlotModel PlotData
+        {
+            get { return _model; }
+        }
+
+        public void Reset()
+        {
+            ((IntervalBarSeries)_model.Series[0]).Items.Clear();
+            ((CategoryAxis)_model.Axes[0]).Labels.Clear();
+            _time.Restart();
         }
 
         void AddItem(String label, OxyColor color, TimeSpan start, TimeSpan end)
@@ -61,22 +66,62 @@
             });
         }
 
-        void Register<T>(Action<T> listener)
+        void TrackRequesting(Object sender, Event ev)
         {
-            var subscriber = new Subscriber<T>(listener);
-            _events.Subscribe(subscriber);
+            var data = ev as RequestEvent;
+
+            if (data != null)
+            {
+                _tracker.Add(data.Request, _time.Elapsed);
+            }
         }
 
-        public PlotModel PlotData
+        void TrackRequested(Object sender, Event ev)
         {
-            get { return _model; }
+            var data = ev as RequestEvent;
+            var start = default(TimeSpan);
+
+            if (data != null && _tracker.TryGetValue(data.Request, out start))
+            {
+                var request = data.Request;
+                AddItem("Request for " + request.Address.Href, OxyColors.Red, start, _time.Elapsed);
+                _tracker.Remove(request);
+            }
         }
 
-        public void Reset()
+        void TrackParsing(Object sender, Event ev)
         {
-            (_model.Series[0] as IntervalBarSeries).Items.Clear();
-            (_model.Axes[0] as CategoryAxis).Labels.Clear();
-            _time.Restart();
+            var html = ev as HtmlParseEvent;
+            var css = ev as CssParseEvent;
+
+            if (html != null)
+            {
+                _tracker.Add(html.Document, _time.Elapsed);
+            }
+            else if (css != null)
+            {
+                _tracker.Add(css.StyleSheet, _time.Elapsed);
+            }
+        }
+
+        void TrackParsed(Object sender, Event ev)
+        {
+            var html = ev as HtmlParseEvent;
+            var css = ev as CssParseEvent;
+            var start = default(TimeSpan);
+
+            if (html != null && _tracker.TryGetValue(html.Document, out start))
+            {
+                var document = html.Document;
+                AddItem("Parse HTML " + document.Url, OxyColors.Orange, start, _time.Elapsed);
+                _tracker.Remove(document);
+            }
+            else if (css != null && _tracker.TryGetValue(css.StyleSheet, out start))
+            {
+                var styleSheet = css.StyleSheet;
+                AddItem("Parse CSS " + styleSheet.Href, OxyColors.Violet, start, _time.Elapsed);
+                _tracker.Remove(styleSheet);
+            }
         }
     }
 }

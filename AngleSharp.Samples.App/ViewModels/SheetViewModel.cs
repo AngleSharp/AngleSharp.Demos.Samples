@@ -2,10 +2,11 @@
 {
     using AngleSharp.Dom;
     using AngleSharp.Dom.Css;
-    using AngleSharp.Events;
+    using AngleSharp.Dom.Events;
+    using System;
     using System.Collections.ObjectModel;
 
-    public class SheetViewModel : BaseViewModel, ITabViewModel, ISubscriber<CssParseStartEvent>
+    public class SheetViewModel : BaseViewModel, ITabViewModel
     {
         readonly ObservableCollection<IStyleSheet> source;
         readonly ObservableCollection<CssRuleViewModel> tree;
@@ -55,25 +56,31 @@
             set
             {
                 if (document != null)
-                    document.Context.Configuration.Events.Unsubscribe(this);
+                {
+                    document.Context.Parsed -= ParseEnded;
+                }
 
                 document = value;
                 source.Clear();
 
                 foreach (var sheet in document.StyleSheets)
+                {
                     source.Add(sheet);
+                }
 
-                document.Context.Configuration.Events.Subscribe(this);
+                document.Context.Parsed += ParseEnded;
                 Selected = null;
             }
         }
 
-        void ISubscriber<CssParseStartEvent>.OnEventData(CssParseStartEvent data)
+        private void ParseEnded(Object sender, Event ev)
         {
-            data.Ended += (s, e) =>
+            var data = ev as CssParseEvent;
+
+            if (data != null)
             {
                 App.Current.Dispatcher.Invoke(() => source.Add(data.StyleSheet));
-            };
+            }
         }
     }
 }

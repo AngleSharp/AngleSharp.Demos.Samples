@@ -7,7 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    class MainViewModel : BaseViewModel
+    sealed class MainViewModel : BaseViewModel
     {
         #region Fields
 
@@ -40,16 +40,15 @@
 
         public MainViewModel()
         {
-            var events = new EventAggregator();
             var requester = new IRequester[] { new DataRequester(), new HttpRequester() };
-            var config = new Configuration(events: events).WithCss().WithDefaultLoader(m => 
+            var config = Configuration.Default.WithCss().WithDefaultLoader(m => 
             {
                 m.IsNavigationEnabled = true;
                 m.IsResourceLoadingEnabled = true;
             }, requester);
             context = BrowsingContext.New(config);
-            profiler = new ProfilerViewModel(events);
-            errors = new ErrorsViewModel(events);
+            profiler = new ProfilerViewModel(context);
+            errors = new ErrorsViewModel(context);
             dom = new DOMViewModel();
             query = new QueryViewModel();
             repl = new ReplViewModel();
