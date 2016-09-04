@@ -1,22 +1,19 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp.Dom;
-    using AngleSharp.Network;
     using AngleSharp.Scripting.JavaScript;
-    using AngleSharp.Services.Scripting;
     using Jint.Runtime;
     using System;
     using System.Collections.ObjectModel;
-    using System.Threading;
     using System.Windows.Input;
 
     sealed class ReplViewModel : BaseViewModel, ITabViewModel
     {
-        readonly String prompt;
-        readonly ObservableCollection<String> items;
-        readonly JavaScriptEngine engine;
-        IDocument document;
-        Boolean readOnly;
+        private readonly String prompt;
+        private readonly ObservableCollection<String> items;
+        private readonly JavaScriptEngine engine;
+        private IDocument document;
+        private Boolean readOnly;
 
         public ReplViewModel()
         {
@@ -83,10 +80,8 @@
 
             try
             {
-                var options = new ScriptOptions(document);
-                var response = VirtualResponse.Create(res => res.Content(command));
-                engine.EvaluateScriptAsync(response, options, CancellationToken.None).Wait();
-                var lines = engine.GetJint(document).GetCompletionValue().ToString();
+                var engine = this.engine.GetOrCreateJint(document);
+                var lines = engine.Execute(command).GetCompletionValue().ToString();
 
                 foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
                 {

@@ -34,37 +34,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AngleSharp, Version=0.9.7.21214, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.0.9.7\lib\net45\AngleSharp.dll</HintPath>
+    <Reference Include="AngleSharp, Version=0.9.8.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.0.9.8\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.4.1.21818, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.4.1\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
+    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.4.2\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Jint, Version=2.7.1.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Jint.2.8\lib\portable-net40+sl50+win+WindowsPhoneApp81+wp80\Jint.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Simple.Wpf.Terminal, Version=1.34.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Simple.Wpf.Terminal.1.34.0.0\lib\net40\Simple.Wpf.Terminal.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Simple.Wpf.Terminal.Themes, Version=1.34.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Simple.Wpf.Terminal.1.34.0.0\lib\net40\Simple.Wpf.Terminal.Themes.dll</HintPath>
+    <Reference Include="Jint, Version=2.9.1.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jint.2.9.1\lib\portable-net40+sl50+win+WindowsPhoneApp81+wp80\Jint.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
