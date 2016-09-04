@@ -8,46 +8,46 @@
 
     public class QueryViewModel : BaseViewModel, ITabViewModel
     {
-        ObservableCollection<IElement> source;
-        String query;
-        IDocument document;
-        Brush state;
-        Int32 result;
-        Int64 time;
+        private readonly ObservableCollection<IElement> _source;
+        private String _query;
+        private IDocument _document;
+        private Brush _state;
+        private Int32 _result;
+        private Int64 _time;
 
         public QueryViewModel()
         {
-            state = Brushes.LightGray;
-            source = new ObservableCollection<IElement>();
-            query = "*";
+            _state = Brushes.LightGray;
+            _source = new ObservableCollection<IElement>();
+            _query = "*";
         }
 
         public Int32 Result
         {
-            get { return result; }
+            get { return _result; }
             set
             {
-                result = value;
+                _result = value;
                 RaisePropertyChanged();
             }
         }
 
         public Int64 Time
         {
-            get { return time; }
+            get { return _time; }
             set
             {
-                time = value;
+                _time = value;
                 RaisePropertyChanged();
             }
         }
 
         public String Query
         {
-            get { return query; }
+            get { return _query; }
             set
             {
-                query = value;
+                _query = value;
                 ChangeQuery();
                 RaisePropertyChanged();
             }
@@ -55,43 +55,45 @@
 
         public Brush State
         {
-            get { return state; }
+            get { return _state; }
             set
             {
-                state = value;
+                _state = value;
                 RaisePropertyChanged();
             }
         }
 
         public ObservableCollection<IElement> Source
         {
-            get { return source; }
+            get { return _source; }
         }
 
-        void ChangeQuery()
+        private void ChangeQuery()
         {
-            if (document == null)
-                return;
-
-            State = Brushes.LightGreen;
-
-            try
+            if (_document != null)
             {
-                var sw = Stopwatch.StartNew();
-                var elements = document.QuerySelectorAll(query);
-                sw.Stop();
-                source.Clear();
+                State = Brushes.LightGreen;
 
-                foreach (var element in elements)
-                    source.Add(element);
+                try
+                {
+                    var sw = Stopwatch.StartNew();
+                    var elements = _document.QuerySelectorAll(_query);
+                    sw.Stop();
+                    _source.Clear();
 
-                State = Brushes.White;
-                Time = sw.ElapsedMilliseconds;
-                Result = elements.Length;
-            }
-            catch (DomException)
-            {
-                State = Brushes.LightPink;
+                    foreach (var element in elements)
+                    {
+                        _source.Add(element);
+                    }
+
+                    State = Brushes.White;
+                    Time = sw.ElapsedMilliseconds;
+                    Result = elements.Length;
+                }
+                catch (DomException)
+                {
+                    State = Brushes.LightPink;
+                }
             }
         }
 
@@ -99,12 +101,12 @@
         {
             get
             {
-                return document;
+                return _document;
             }
             set
             {
                 State = Brushes.LightGray;
-                document = value;
+                _document = value;
                 ChangeQuery();
             }
         }

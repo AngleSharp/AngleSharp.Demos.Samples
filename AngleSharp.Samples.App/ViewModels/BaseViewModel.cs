@@ -14,24 +14,29 @@
 
         protected void RaisePropertyChanged([CallerMemberName] String name = null)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         protected Url CreateUrlFrom(String address)
         {
             if (File.Exists(address))
+            {
                 address = "file://localhost/" + address.Replace('\\', '/');
+            }
 
             var lurl = address.ToLower();
 
             if (!lurl.StartsWith("file://") && !lurl.StartsWith("http://") && !lurl.StartsWith("https://") && !lurl.StartsWith("data:"))
+            {
                 address = "http://" + address;
+            }
 
             var url = Url.Create(address);
 
-            if (url.IsInvalid == false && url.IsAbsolute)
+            if (!url.IsInvalid && url.IsAbsolute)
+            {
                 return url;
+            }
 
             return Url.Create("http://www.google.com/search?q=" + address);
         }

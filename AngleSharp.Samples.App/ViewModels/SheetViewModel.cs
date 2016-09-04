@@ -8,43 +8,43 @@
 
     public class SheetViewModel : BaseViewModel, ITabViewModel
     {
-        readonly ObservableCollection<IStyleSheet> source;
-        readonly ObservableCollection<CssRuleViewModel> tree;
-        IStyleSheet selected;
-        IDocument document;
+        private readonly ObservableCollection<IStyleSheet> _source;
+        private readonly ObservableCollection<CssRuleViewModel> _tree;
+        private IStyleSheet _selected;
+        private IDocument _document;
 
         public SheetViewModel()
 	    {
-            source = new ObservableCollection<IStyleSheet>();
-            tree = new ObservableCollection<CssRuleViewModel>();
+            _source = new ObservableCollection<IStyleSheet>();
+            _tree = new ObservableCollection<CssRuleViewModel>();
 	    }
 
         public ObservableCollection<IStyleSheet> Source
         {
-            get { return source; }
+            get { return _source; }
         }
 
         public ObservableCollection<CssRuleViewModel> Tree
         {
-            get { return tree; }
+            get { return _tree; }
         }
 
         public IStyleSheet Selected
         {
-            get { return selected; }
+            get { return _selected; }
             set 
             {
-                selected = value;
+                _selected = value;
                 RaisePropertyChanged();
-                tree.Clear();
-                var sheet = selected as ICssStyleSheet;
+                _tree.Clear();
+                var sheet = _selected as ICssStyleSheet;
 
                 if (sheet != null)
                 {
                     for (int i = 0; i < sheet.Rules.Length; i++)
                     {
                         var rule = new CssRuleViewModel(sheet.Rules[i]);
-                        tree.Add(rule);
+                        _tree.Add(rule);
                     }
                 }
             }
@@ -52,23 +52,23 @@
 
         public IDocument Document
         {
-            get { return document; }
+            get { return _document; }
             set
             {
-                if (document != null)
+                if (_document != null)
                 {
-                    document.Context.Parsed -= ParseEnded;
+                    _document.Context.Parsed -= ParseEnded;
                 }
 
-                document = value;
-                source.Clear();
+                _document = value;
+                _source.Clear();
 
-                foreach (var sheet in document.StyleSheets)
+                foreach (var sheet in _document.StyleSheets)
                 {
-                    source.Add(sheet);
+                    _source.Add(sheet);
                 }
 
-                document.Context.Parsed += ParseEnded;
+                _document.Context.Parsed += ParseEnded;
                 Selected = null;
             }
         }
@@ -79,7 +79,7 @@
 
             if (data != null)
             {
-                App.Current.Dispatcher.Invoke(() => source.Add(data.StyleSheet));
+                App.Current.Dispatcher.Invoke(() => _source.Add(data.StyleSheet));
             }
         }
     }

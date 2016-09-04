@@ -10,27 +10,27 @@
 
     public class DOMNodeViewModel : BaseViewModel
     {
-        ObservableCollection<DOMNodeViewModel> children;
-        String name;
-        String typeName;
-        String value;
-        Boolean selected;
-        Boolean expanded;
-        Boolean populated;
-        Object element;
-        DOMNodeViewModel parent;
+        private readonly ObservableCollection<DOMNodeViewModel> _children;
+        private readonly String _name;
+        private readonly Object _element;
+        private readonly DOMNodeViewModel _parent;
+        private String _typeName;
+        private String _value;
+        private Boolean _selected;
+        private Boolean _expanded;
+        private Boolean _populated;
 
         public DOMNodeViewModel(Object nodeElement, String nodeName = "document", DOMNodeViewModel nodeParent = null)
         {
-            element = nodeElement;
-            parent = nodeParent;
-            children = new ObservableCollection<DOMNodeViewModel>();
-            name = nodeName;
+            _element = nodeElement;
+            _parent = nodeParent;
+            _children = new ObservableCollection<DOMNodeViewModel>();
+            _name = nodeName;
 
             if (nodeElement == null)
             {
-                populated = true;
-                typeName = "<null>";
+                _populated = true;
+                _typeName = "<null>";
             }
             else if (nodeParent == null)
             {
@@ -42,81 +42,85 @@
 
         public String Name
         {
-            get { return name; }
+            get { return _name; }
         }
 
         public String Value
         {
-            get { return value; }
+            get { return _value; }
             set
             {
-                this.value = value;
+                _value = value;
                 RaisePropertyChanged();
             }
         }
 
         public DOMNodeViewModel Parent
         {
-            get { return parent; }
+            get { return _parent; }
         }
 
         public String TypeName
         {
-            get { return typeName; }
+            get { return _typeName; }
         }
 
         public ObservableCollection<DOMNodeViewModel> Children
         {
-            get { return children; }
+            get { return _children; }
         }
 
         public Boolean IsSelected
         {
-            get { return selected; }
+            get { return _selected; }
             set
             {
-                selected = value;
+                _selected = value;
                 RaisePropertyChanged();
             }
         }
 
         public Boolean IsExpanded
         {
-            get { return expanded; }
+            get { return _expanded; }
             set
             {
-                expanded = value;
+                _expanded = value;
 
-                foreach (var child in children)
+                foreach (var child in _children)
                     child.CreateChildren();
 
                 RaisePropertyChanged();
             }
         }
 
-        void CreateChildren()
+        private void CreateChildren()
         {
-            if (!populated)
+            if (!_populated)
             {
-                var type = element.GetType();
-                typeName = type.Name;
+                var type = _element.GetType();
+                _typeName = type.Name;
                 SetMembers(type);
-                populated = true;
+                _populated = true;
             }
         }
 
-        void SetMembers(Type type)
+        private void SetMembers(Type type)
         {
             if (type.GetCustomAttribute<DomNameAttribute>() == null)
             {
                 foreach (var contract in type.GetInterfaces())
+                {
                     SetMembers(contract);
+                }
             }
             else
+            {
                 SetProperties(type.GetProperties());
+            }
         }
 
-        void SetProperties(IEnumerable<PropertyInfo> properties)
+        private void SetProperties(IEnumerable<PropertyInfo> properties)
         {
             var hv = true;
 
@@ -132,22 +136,22 @@
                     {
                         case 0:
                         {
-                            var value = property.GetValue(element);
-                            children.Add(new DOMNodeViewModel(value, name, this));
+                            var value = property.GetValue(_element);
+                            _children.Add(new DOMNodeViewModel(value, name, this));
                             break;
                         }
                         case 1:
                         {
-                            if (element is IEnumerable)
+                            if (_element is IEnumerable)
                             {
-                                var collection = (IEnumerable)element;
+                                var collection = (IEnumerable)_element;
                                 var index = 0;
                                 var idx = new object[1];
 
                                 foreach (var item in collection)
                                 {
                                     idx[0] = index;
-                                    children.Add(new DOMNodeViewModel(item, "[" + index.ToString() + "]", this));
+                                    _children.Add(new DOMNodeViewModel(item, "[" + index.ToString() + "]", this));
                                     index++;
                                 }
                             }
@@ -157,8 +161,10 @@
                 }
             }
 
-            if (hv) 
-                Value = element.ToString();
+            if (hv)
+            {
+                Value = _element.ToString();
+            }
         }
     }
 }

@@ -5,35 +5,35 @@
 
     public class TreeViewModel : BaseViewModel, ITabViewModel
     {
-        readonly ObservableCollection<TreeNodeViewModel> nodes;
-        IDocument document;
+        private readonly ObservableCollection<TreeNodeViewModel> _nodes;
+        private IDocument _document;
 
         public TreeViewModel()
         {
-            nodes = new ObservableCollection<TreeNodeViewModel>();
+            _nodes = new ObservableCollection<TreeNodeViewModel>();
         }
 
         public ObservableCollection<TreeNodeViewModel> Tree
         {
-            get { return nodes; }
+            get { return _nodes; }
         }
 
         public IDocument Document
         {
             get
             {
-                return document;
+                return _document;
             }
             set
             {
-                document = value;
-                nodes.Clear();
-                var elements = TreeNodeViewModel.SelectFrom(document.ChildNodes);
+                _document = value;
+                _nodes.Clear();
+                var elements = TreeNodeViewModel.SelectFrom(_document.ChildNodes);
 
                 foreach (var element in elements)
                 {
-                    element.Parent = nodes;
-                    nodes.Add(element);
+                    element.Parent = _nodes;
+                    _nodes.Add(element);
                 }
             }
         }

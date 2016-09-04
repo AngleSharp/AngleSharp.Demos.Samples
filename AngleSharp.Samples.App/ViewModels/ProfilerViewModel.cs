@@ -11,10 +11,10 @@
 
     public class ProfilerViewModel : BaseViewModel, IEventViewModel
     {
-        readonly Stopwatch _time;
-        readonly Dictionary<Object, TimeSpan> _tracker;
-        readonly IBrowsingContext _context;
-        readonly PlotModel _model;
+        private readonly Stopwatch _time;
+        private readonly Dictionary<Object, TimeSpan> _tracker;
+        private readonly IBrowsingContext _context;
+        private readonly PlotModel _model;
 
         public ProfilerViewModel(IBrowsingContext context)
         {
@@ -28,7 +28,7 @@
             _context.Requested += TrackRequested;
         }
 
-        static PlotModel CreateModel()
+        private static PlotModel CreateModel()
         {
             var model = new PlotModel { LegendPlacement = LegendPlacement.Outside };
             var valueAxis = new LinearAxis { Position = AxisPosition.Bottom, MinimumPadding = 0.1, MaximumPadding = 0.1 };
@@ -52,7 +52,7 @@
             _time.Restart();
         }
 
-        void AddItem(String label, OxyColor color, TimeSpan start, TimeSpan end)
+        private void AddItem(String label, OxyColor color, TimeSpan start, TimeSpan end)
         {
             App.Current.Dispatcher.Invoke(() =>
             {
@@ -66,7 +66,7 @@
             });
         }
 
-        void TrackRequesting(Object sender, Event ev)
+        private void TrackRequesting(Object sender, Event ev)
         {
             var data = ev as RequestEvent;
 
@@ -76,7 +76,7 @@
             }
         }
 
-        void TrackRequested(Object sender, Event ev)
+        private void TrackRequested(Object sender, Event ev)
         {
             var data = ev as RequestEvent;
             var start = default(TimeSpan);
@@ -89,7 +89,7 @@
             }
         }
 
-        void TrackParsing(Object sender, Event ev)
+        private void TrackParsing(Object sender, Event ev)
         {
             var html = ev as HtmlParseEvent;
             var css = ev as CssParseEvent;
@@ -104,7 +104,7 @@
             }
         }
 
-        void TrackParsed(Object sender, Event ev)
+        private void TrackParsed(Object sender, Event ev)
         {
             var html = ev as HtmlParseEvent;
             var css = ev as CssParseEvent;

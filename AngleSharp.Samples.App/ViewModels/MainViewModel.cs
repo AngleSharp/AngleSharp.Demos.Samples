@@ -1,8 +1,6 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp;
-    using AngleSharp.Network;
-    using AngleSharp.Network.Default;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -11,28 +9,28 @@
     {
         #region Fields
 
-        readonly ITabViewModel[] views;
-        readonly IEventViewModel[] logs;
-        readonly IBrowsingContext context;
+        private readonly ITabViewModel[] _views;
+        private readonly IEventViewModel[] _logs;
+        private readonly IBrowsingContext _context;
 
-        Task current;
-        CancellationTokenSource cts;
-        String status;
-        String address;
+        private Task _current;
+        private CancellationTokenSource _cts;
+        private String _status;
+        private String _address;
 
         #endregion
 
         #region Child View Models
 
-        readonly DOMViewModel dom;
-        readonly ProfilerViewModel profiler;
-        readonly QueryViewModel query;
-        readonly ReplViewModel repl;
-        readonly SettingsViewModel settings;
-        readonly StatisticsViewModel statistics;
-        readonly TreeViewModel tree;
-        readonly SheetViewModel sheets;
-        readonly ErrorsViewModel errors;
+        private readonly DOMViewModel _dom;
+        private readonly ProfilerViewModel _profiler;
+        private readonly QueryViewModel _query;
+        private readonly ReplViewModel _repl;
+        private readonly SettingsViewModel _settings;
+        private readonly StatisticsViewModel _statistics;
+        private readonly TreeViewModel _tree;
+        private readonly SheetViewModel _sheets;
+        private readonly ErrorsViewModel _errors;
 
         #endregion
 
@@ -40,36 +38,35 @@
 
         public MainViewModel()
         {
-            var requester = new IRequester[] { new DataRequester(), new HttpRequester() };
-            var config = Configuration.Default.WithCss().WithDefaultLoader(m => 
+            var config = Configuration.Default.WithCss().WithRequesters(setup => 
             {
-                m.IsNavigationEnabled = true;
-                m.IsResourceLoadingEnabled = true;
-            }, requester);
-            context = BrowsingContext.New(config);
-            profiler = new ProfilerViewModel(context);
-            errors = new ErrorsViewModel(context);
-            dom = new DOMViewModel();
-            query = new QueryViewModel();
-            repl = new ReplViewModel();
-            settings = new SettingsViewModel();
-            statistics = new StatisticsViewModel();
-            tree = new TreeViewModel();
-            sheets = new SheetViewModel();
-            cts = new CancellationTokenSource();
-            views = new ITabViewModel[] 
+                setup.IsNavigationEnabled = true;
+                setup.IsResourceLoadingEnabled = true;
+            });
+            _context = BrowsingContext.New(config);
+            _profiler = new ProfilerViewModel(_context);
+            _errors = new ErrorsViewModel(_context);
+            _dom = new DOMViewModel();
+            _query = new QueryViewModel();
+            _repl = new ReplViewModel();
+            _settings = new SettingsViewModel();
+            _statistics = new StatisticsViewModel();
+            _tree = new TreeViewModel();
+            _sheets = new SheetViewModel();
+            _cts = new CancellationTokenSource();
+            _views = new ITabViewModel[] 
             {
-                dom,
-                query,
-                repl,
-                statistics,
-                tree,
-                sheets
+                _dom,
+                _query,
+                _repl,
+                _statistics,
+                _tree,
+                _sheets
             };
-            logs = new IEventViewModel[]
+            _logs = new IEventViewModel[]
             {
-                profiler,
-                errors
+                _profiler,
+                _errors
             };
         }
 
@@ -79,65 +76,65 @@
 
         public DOMViewModel Dom
         {
-            get { return dom; }
+            get { return _dom; }
         }
 
         public ErrorsViewModel Errors
         {
-            get { return errors; }
+            get { return _errors; }
         }
 
         public ProfilerViewModel Profiler
         {
-            get { return profiler; }
+            get { return _profiler; }
         }
 
         public QueryViewModel Queries
         {
-            get { return query; }
+            get { return _query; }
         }
 
         public ReplViewModel Console
         {
-            get { return repl; }
+            get { return _repl; }
         }
 
         public SettingsViewModel Settings
         {
-            get { return settings; }
+            get { return _settings; }
         }
 
         public StatisticsViewModel Statistics
         {
-            get { return statistics; }
+            get { return _statistics; }
         }
 
         public TreeViewModel Tree
         {
-            get { return tree; }
+            get { return _tree; }
         }
 
         public SheetViewModel Sheets
         {
-            get { return sheets; }
+            get { return _sheets; }
         }
 
         public String Address
         {
-            get { return address; }
+            get { return _address; }
             set 
             { 
-                address = value; 
+                _address = value; 
                 RaisePropertyChanged();
             }
         }
 
         public String Status
         {
-            get { return status; }
+            get { return _status; }
             set
             {
-                status = value;
+                _status = value;
                 RaisePropertyChanged();
             }
         }
@@ -148,29 +145,33 @@
 
         public void Go()
         {
-            var url = CreateUrlFrom(address);
+            var url = CreateUrlFrom(_address);
 
-            if (current != null && !current.IsCompleted)
+            if (_current != null && !_current.IsCompleted)
             {
-                cts.Cancel();
-                cts = new CancellationTokenSource();
+                _cts.Cancel();
+                _cts = new CancellationTokenSource();
             }
 
-            profiler.Reset();
-            current = LoadAsync(url, cts.Token);
+            _profiler.Reset();
+            _current = LoadAsync(url, _cts.Token);
         }
 
-        async Task LoadAsync(Url url, CancellationToken cancel)
+        private async Task LoadAsync(Url url, CancellationToken cancel)
         {
             Status = String.Format("Loading {0} ...", url.Href);
 
-            foreach (var log in logs)
+            foreach (var log in _logs)
+            {
                 log.Reset();
+            }
 
-            var document = await context.OpenAsync(url, cancel);
+            var document = await _context.OpenAsync(url, cancel);
 
-            foreach (var view in views)
+            foreach (var view in _views)
+            {
                 view.Document = document;
+            }
 
             Status = String.Format("Loaded {0}.", url.Href);
         }

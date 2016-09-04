@@ -6,64 +6,62 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public class StatisticsViewModel : BaseViewModel, ITabViewModel
     {
-        PlotModel mostElements;
-        PlotModel mostClasses;
-        PlotModel mostWords;
-        PlotModel various;
-        PlotModel mostAttributes;
-        IDocument document;
+        private PlotModel _mostElements;
+        private PlotModel _mostClasses;
+        private PlotModel _mostWords;
+        private PlotModel _various;
+        private PlotModel _mostAttributes;
+        private IDocument _document;
 
         public PlotModel MostElements
         {
-            get { return mostElements; }
+            get { return _mostElements; }
             set
             {
-                mostElements = value;
+                _mostElements = value;
                 RaisePropertyChanged();
             }
         }
 
         public PlotModel MostAttributes
         {
-            get { return mostAttributes; }
+            get { return _mostAttributes; }
             set
             {
-                mostAttributes = value;
+                _mostAttributes = value;
                 RaisePropertyChanged();
             }
         }
 
         public PlotModel MostClasses
         {
-            get { return mostClasses; }
+            get { return _mostClasses; }
             set
             {
-                mostClasses = value;
+                _mostClasses = value;
                 RaisePropertyChanged();
             }
         }
 
         public PlotModel MostWords
         {
-            get { return mostWords; }
+            get { return _mostWords; }
             set
             {
-                mostWords = value;
+                _mostWords = value;
                 RaisePropertyChanged();
             }
         }
 
         public PlotModel Various
         {
-            get { return various; }
+            get { return _various; }
             set
             {
-                various = value;
+                _various = value;
                 RaisePropertyChanged();
             }
         }
@@ -72,25 +70,25 @@
         {
             get
             {
-                return document;
+                return _document;
             }
             set
             {
-                document = value;
+                _document = value;
                 var elements = new Dictionary<String, Int32>();
                 var attributes = new Dictionary<String, Int32>();
                 var classes = new Dictionary<String, Int32>();
                 var words = new Dictionary<String, Int32>();
                 var various = new Dictionary<String, Int32>();
 
-                various.Add("Images", document.Images.Length);
-                various.Add("Scripts", document.Scripts.Length);
-                various.Add("Stylesheets", document.StyleSheets.Length);
-                various.Add("Plugins", document.Plugins.Length);
-                various.Add("Forms", document.Forms.Length);
+                various.Add("Images", _document.Images.Length);
+                various.Add("Scripts", _document.Scripts.Length);
+                various.Add("Stylesheets", _document.StyleSheets.Length);
+                various.Add("Plugins", _document.Plugins.Length);
+                various.Add("Forms", _document.Forms.Length);
 
-                Inspect(document.DocumentElement, elements, classes, attributes);
-                Words(document.DocumentElement.TextContent.ToCharArray(), words);
+                Inspect(_document.DocumentElement, elements, classes, attributes);
+                Words(_document.DocumentElement.TextContent.ToCharArray(), words);
 
                 MostElements = CreatePieChart("Most elements", elements);
                 MostClasses = CreatePieChart("Most classes", classes);
@@ -99,7 +97,7 @@
             }
         }
 
-        PlotModel CreatePieChart(String title, Dictionary<String, Int32> data)
+        private PlotModel CreatePieChart(String title, Dictionary<String, Int32> data)
         {
             var pm = new PlotModel();
             var ps = new PieSeries();
@@ -112,7 +110,9 @@
                 var ranking = data.OrderByDescending(m => m.Value).Take(8);
 
                 foreach (var element in ranking)
+                {
                     ps.Slices.Add(new PieSlice(element.Key, element.Value));
+                }
             }
 
             ps.InnerDiameter = 0.2;
@@ -126,7 +126,7 @@
             return pm;
         }
 
-        void Words(Char[] content, Dictionary<String, Int32> words)
+        private void Words(Char[] content, Dictionary<String, Int32> words)
         {
             var index = 0;
             var length = 0;
@@ -142,9 +142,13 @@
                         var word = new String(content, index, length);
 
                         if (words.ContainsKey(word))
+                        {
                             words[word]++;
+                        }
                         else
+                        {
                             words.Add(word, 1);
+                        }
                     }
 
                     index = i + 1;
@@ -152,31 +156,45 @@
             }
         }
 
-        void Inspect(IElement element, Dictionary<String, Int32> elements, Dictionary<String, Int32> classes, Dictionary<String, Int32> attributes)
+        private void Inspect(IElement element, Dictionary<String, Int32> elements, Dictionary<String, Int32> classes, Dictionary<String, Int32> attributes)
         {
             if (elements.ContainsKey(element.LocalName))
+            {
                 elements[element.LocalName]++;
+            }
             else
+            {
                 elements.Add(element.LocalName, 1);
+            }
 
             foreach (var cls in element.ClassList)
             {
                 if (classes.ContainsKey(cls))
+                {
                     classes[cls]++;
+                }
                 else
+                {
                     classes.Add(cls, 1);
+                }
             }
 
             foreach (var attr in element.Attributes)
             {
                 if (attributes.ContainsKey(attr.Name))
+                {
                     attributes[attr.Name]++;
+                }
                 else
+                {
                     attributes.Add(attr.Name, 1);
+                }
             }
 
             foreach (var child in element.Children)
+            {
                 Inspect(child, elements, classes, attributes);
+            }
         }
     }
 }

@@ -8,9 +8,9 @@
 
     class ErrorsViewModel : BaseViewModel, IEventViewModel
     {
-        readonly IBrowsingContext _context;
-        readonly ObservableCollection<CssErrorEvent> _cssErrors;
-        readonly ObservableCollection<HtmlErrorEvent> _htmlErrors;
+        private readonly IBrowsingContext _context;
+        private readonly ObservableCollection<CssErrorEvent> _cssErrors;
+        private readonly ObservableCollection<HtmlErrorEvent> _htmlErrors;
 
         public ErrorsViewModel(IBrowsingContext context)
         {
@@ -31,7 +31,7 @@
             get { return _htmlErrors; }
         }
 
-        void Register<T>(Action<T> listener)
+        private void Register<T>(Action<T> listener)
             where T : Event
         {
             _context.ParseError += (obj, ev) =>

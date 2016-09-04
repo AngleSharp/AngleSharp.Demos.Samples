@@ -6,19 +6,19 @@
 
     public class CssRuleViewModel : BaseViewModel
     {
-        readonly ObservableCollection<CssRuleViewModel> children;
-        readonly String typeName;
-        readonly String name;
+        private readonly ObservableCollection<CssRuleViewModel> _children;
+        private readonly String _typeName;
+        private readonly String _name;
 
         private CssRuleViewModel()
         {
-            this.children = new ObservableCollection<CssRuleViewModel>();
+            _children = new ObservableCollection<CssRuleViewModel>();
         }
 
         private CssRuleViewModel(Type type)
             : this()
         {
-            this.typeName = type.Name;
+            _typeName = type.Name;
         }
 
         private CssRuleViewModel(Object o)
@@ -29,9 +29,9 @@
         private CssRuleViewModel(String name, String value)
             : this()
         {
-            this.name = name;
-            this.typeName = "CssProperty";
-            this.children.Add(new CssRuleViewModel(value));
+            _name = name;
+            _typeName = "CssProperty";
+            _children.Add(new CssRuleViewModel(value));
         }
 
         public CssRuleViewModel(ICssRule rule)
@@ -41,48 +41,48 @@
             {
                 case CssRuleType.FontFace:
                     var font = (ICssFontFaceRule)rule;
-                    name = "@font-face";
+                    _name = "@font-face";
                     Populate(font);
                     break;
 
                 case CssRuleType.Keyframe:
                     var keyframe = (ICssKeyframeRule)rule;
-                    name = keyframe.KeyText;
+                    _name = keyframe.KeyText;
                     Populate(keyframe.Style);
                     break;
 
                 case CssRuleType.Keyframes:
                     var keyframes = (ICssKeyframesRule)rule;
-                    name = "@keyframes " + keyframes.Name;
+                    _name = "@keyframes " + keyframes.Name;
                     Populate(keyframes.Rules);
                     break;
 
                 case CssRuleType.Media:
                     var media = (ICssMediaRule)rule;
-                    name = "@media " + media.Media.MediaText;
+                    _name = "@media " + media.Media.MediaText;
                     Populate(media.Rules);
                     break;
 
                 case CssRuleType.Page:
                     var page = (ICssPageRule)rule;
-                    name = "@page " + page.SelectorText;
+                    _name = "@page " + page.SelectorText;
                     Populate(page.Style);
                     break;
 
                 case CssRuleType.Style:
                     var style = (ICssStyleRule)rule;
-                    name = style.SelectorText;
+                    _name = style.SelectorText;
                     Populate(style.Style);
                     break;
 
                 case CssRuleType.Supports:
                     var support = (ICssSupportsRule)rule;
-                    name = "@supports " + support.ConditionText;
+                    _name = "@supports " + support.ConditionText;
                     Populate(support.Rules);
                     break;
 
                 default:
-                    name = rule.CssText;
+                    _name = rule.CssText;
                     break;
             }
         }
@@ -95,11 +95,11 @@
         public CssRuleViewModel(String value)
             : this()
         {
-            name = value;
-            typeName = "CssValue";
+            _name = value;
+            _typeName = "CssValue";
         }
 
-        void Populate(ICssFontFaceRule font)
+        private void Populate(ICssFontFaceRule font)
         {
             AddIfNotEmpty("Family", font.Family);
             AddIfNotEmpty("Features", font.Features);
@@ -111,37 +111,43 @@
             AddIfNotEmpty("Weight", font.Weight);
         }
 
-        void AddIfNotEmpty(String name, String value)
+        private void AddIfNotEmpty(String name, String value)
         {
             if (!String.IsNullOrEmpty(value))
-                children.Add(new CssRuleViewModel(name, value));
+            {
+                _children.Add(new CssRuleViewModel(name, value));
+            }
         }
 
-        void Populate(ICssStyleDeclaration declarations)
+        private void Populate(ICssStyleDeclaration declarations)
         {
             foreach (var declaration in declarations)
-                children.Add(new CssRuleViewModel(declaration));
+            {
+                _children.Add(new CssRuleViewModel(declaration));
+            }
         }
 
-        void Populate(ICssRuleList rules)
+        private void Populate(ICssRuleList rules)
         {
             foreach (var rule in rules)
-                children.Add(new CssRuleViewModel(rule));
+            {
+                _children.Add(new CssRuleViewModel(rule));
+            }
         }
 
         public String Name
         {
-            get { return name; }
+            get { return _name; }
         }
 
         public String TypeName
         {
-            get { return typeName; }
+            get { return _typeName; }
         }
 
         public ObservableCollection<CssRuleViewModel> Children
         {
-            get { return children; }
+            get { return _children; }
         }
     }
 }

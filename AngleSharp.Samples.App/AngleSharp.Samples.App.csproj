@@ -46,6 +46,10 @@
       <HintPath>..\packages\AngleSharp.0.9.8\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AngleSharp.Io, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.Io.0.3.2\lib\net45\AngleSharp.Io.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.4.2\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
       <Private>True</Private>

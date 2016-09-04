@@ -6,11 +6,11 @@
 
     public class SettingsViewModel : BaseViewModel
     {
-        ObservableCollection<String> urls;
+        private readonly ObservableCollection<String> _urls;
 
         public SettingsViewModel()
         {
-            urls = new ObservableCollection<String>();
+            _urls = new ObservableCollection<String>();
 
             if (Properties.Settings.Default.TypedUrls == null)
             {
@@ -19,12 +19,14 @@
             }
 
             foreach (var url in Properties.Settings.Default.TypedUrls)
-                urls.Add(url);
+            {
+                _urls.Add(url);
+            }
         }
 
         public ObservableCollection<String> Urls
         {
-            get { return urls; }
+            get { return _urls; }
         }
 
         public void AddUrl(String url)
@@ -33,7 +35,7 @@
             {
                 Properties.Settings.Default.TypedUrls.Add(url);
                 Properties.Settings.Default.Save();
-                urls.Add(url);
+                _urls.Add(url);
             }
         }
     }

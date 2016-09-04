@@ -9,46 +9,46 @@
 
     sealed class ReplViewModel : BaseViewModel, ITabViewModel
     {
-        private readonly String prompt;
-        private readonly ObservableCollection<String> items;
-        private readonly JavaScriptEngine engine;
-        private IDocument document;
-        private Boolean readOnly;
+        private readonly String _prompt;
+        private readonly ObservableCollection<String> _items;
+        private readonly JavaScriptEngine _engine;
+        private IDocument _document;
+        private Boolean _readOnly;
 
         public ReplViewModel()
         {
-            readOnly = false;
-            engine = new JavaScriptEngine();
-            prompt = "$ ";
-            items = new ObservableCollection<String>();
+            _readOnly = false;
+            _engine = new JavaScriptEngine();
+            _prompt = "$ ";
+            _items = new ObservableCollection<String>();
             ClearCommand = new RelayCommand(() => Clear());
             ExecuteCommand = new RelayCommand(cmd => Run(cmd.ToString()));
         }
 
         public Boolean IsReadOnly
         {
-            get { return readOnly; }
+            get { return _readOnly; }
             private set
             {
-                readOnly = value;
+                _readOnly = value;
                 RaisePropertyChanged();
             }
         }
 
         public IDocument Document
         {
-            get { return document; }
-            set { document = value; Clear(); }
+            get { return _document; }
+            set { _document = value; Clear(); }
         }
 
         public ObservableCollection<String> Items
         {
-            get { return items; }
+            get { return _items; }
         }
 
         public String Prompt
         {
-            get { return prompt; }
+            get { return _prompt; }
         }
 
         public ICommand ClearCommand
@@ -71,26 +71,26 @@
 
         void Clear()
         {
-            items.Clear();
+            _items.Clear();
         }
 
         void Run(String command)
         {
-            items.Add(prompt + command);
+            _items.Add(_prompt + command);
 
             try
             {
-                var engine = this.engine.GetOrCreateJint(document);
+                var engine = this._engine.GetOrCreateJint(_document);
                 var lines = engine.Execute(command).GetCompletionValue().ToString();
 
                 foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
                 {
-                    items.Add(line);
+                    _items.Add(line);
                 }
             }
             catch (JavaScriptException ex)
             {
-                items.Add(ex.Error.ToString());
+                _items.Add(ex.Error.ToString());
             }
         }
     }

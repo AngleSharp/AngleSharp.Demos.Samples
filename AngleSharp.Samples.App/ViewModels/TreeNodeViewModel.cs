@@ -9,15 +9,15 @@
 
     public class TreeNodeViewModel : BaseViewModel
     {
-        readonly ObservableCollection<TreeNodeViewModel> children;
-        Boolean expanded;
-        Boolean selected;
-        String value;
-        Brush foreground;
-        TreeNodeViewModel expansionElement;
-        ObservableCollection<TreeNodeViewModel> parent;
+        private readonly ObservableCollection<TreeNodeViewModel> children;
+        private Boolean expanded;
+        private Boolean selected;
+        private String value;
+        private Brush foreground;
+        private TreeNodeViewModel expansionElement;
+        private ObservableCollection<TreeNodeViewModel> parent;
 
-        TreeNodeViewModel()
+        private TreeNodeViewModel()
         {
             children = new ObservableCollection<TreeNodeViewModel>();
             expanded = false;
@@ -94,7 +94,7 @@
             return null;
         }
 
-        static TreeNodeViewModel Create(IText text)
+        private static TreeNodeViewModel Create(IText text)
         {
             if(String.IsNullOrEmpty(text.Data))
                 return null;
@@ -107,7 +107,7 @@
             return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Text(text.Data), Foreground = Brushes.SteelBlue };
         }
 
-        static TreeNodeViewModel Create(IElement node)
+        private static TreeNodeViewModel Create(IElement node)
         {
             var vm = new TreeNodeViewModel { Value = OpenTag(node) };
 
@@ -134,12 +134,12 @@
             }
         }
 
-        static String OpenTag(IElement element)
+        private static String OpenTag(IElement element)
         {
             return HtmlMarkupFormatter.Instance.OpenTag(element, false);
         }
 
-        static String CloseTag(IElement element)
+        private static String CloseTag(IElement element)
         {
             return HtmlMarkupFormatter.Instance.CloseTag(element, false);
         }

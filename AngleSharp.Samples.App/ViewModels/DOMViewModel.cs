@@ -5,25 +5,25 @@
 
     public class DOMViewModel : BaseViewModel, ITabViewModel
     {
-        ObservableCollection<DOMNodeViewModel> source;
-        IDocument document;
+        private readonly ObservableCollection<DOMNodeViewModel> _source;
+        private IDocument _document;
 
         public DOMViewModel ()
 	    {
-            source = new ObservableCollection<DOMNodeViewModel>();
+            _source = new ObservableCollection<DOMNodeViewModel>();
 	    }
 
         public ObservableCollection<DOMNodeViewModel> Source
         {
-            get { return source; }
+            get { return _source; }
         }
 
         public DOMNodeViewModel Root
         {
             set
             {
-                source.Clear();
-                source.Add(value);
+                _source.Clear();
+                _source.Add(value);
             }
         }
 
@@ -31,12 +31,12 @@
         {
             get
             {
-                return document;
+                return _document;
             }
             set
             {
-                document = value;
-                Root = new DOMNodeViewModel(document);
+                _document = value;
+                Root = new DOMNodeViewModel(_document);
             }
         }
     }

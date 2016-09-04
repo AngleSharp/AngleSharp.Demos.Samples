@@ -11,7 +11,7 @@
             remove { }
         }
 
-        readonly Action<Object> _action;
+        private readonly Action<Object> _action;
 
         public RelayCommand(Action action)
             : this(_ => action())
@@ -30,7 +30,7 @@
 
         public void Execute(Object parameter)
         {
-            _action(parameter);
+            _action.Invoke(parameter);
         }
     }
 }
