@@ -42,16 +42,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="AngleSharp, Version=0.9.8.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.0.9.8\lib\net45\AngleSharp.dll</HintPath>
+    <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AngleSharp.Io, Version=0.3.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AngleSharp.Io.0.3.2\lib\net45\AngleSharp.Io.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.4.2\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
+    <Reference Include="AngleSharp.Scripting.JavaScript, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.Scripting.JavaScript.0.5.0\lib\portable-windows8+net45+windowsphone8+wpa+monoandroid+monotouch\AngleSharp.Scripting.JavaScript.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Jint, Version=2.9.1.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">

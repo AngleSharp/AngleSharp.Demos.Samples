@@ -1,7 +1,7 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp.Dom;
-    using AngleSharp.Scripting.JavaScript;
+    using AngleSharp.Extensions;
     using Jint.Runtime;
     using System;
     using System.Collections.ObjectModel;
@@ -11,14 +11,12 @@
     {
         private readonly String _prompt;
         private readonly ObservableCollection<String> _items;
-        private readonly JavaScriptEngine _engine;
         private IDocument _document;
         private Boolean _readOnly;
 
         public ReplViewModel()
         {
             _readOnly = false;
-            _engine = new JavaScriptEngine();
             _prompt = "$ ";
             _items = new ObservableCollection<String>();
             ClearCommand = new RelayCommand(() => Clear());
@@ -80,8 +78,8 @@
 
             try
             {
-                var engine = this._engine.GetOrCreateJint(_document);
-                var lines = engine.Execute(command).GetCompletionValue().ToString();
+                var s = _document.ExecuteScript(command);
+                var lines = s.ToString();
 
                 foreach (var line in lines.Split(new[] { "\n" }, StringSplitOptions.None))
                 {

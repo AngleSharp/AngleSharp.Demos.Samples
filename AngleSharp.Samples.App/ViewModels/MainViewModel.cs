@@ -38,11 +38,11 @@
 
         public MainViewModel()
         {
-            var config = Configuration.Default.WithCss().WithRequesters(setup => 
+            var config = Configuration.Default.WithCss().WithRequesters(setup =>
             {
                 setup.IsNavigationEnabled = true;
                 setup.IsResourceLoadingEnabled = true;
-            });
+            }).WithJavaScript();
             _context = BrowsingContext.New(config);
             _profiler = new ProfilerViewModel(_context);
             _errors = new ErrorsViewModel(_context);

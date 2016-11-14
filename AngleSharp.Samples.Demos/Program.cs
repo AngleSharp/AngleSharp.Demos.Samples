@@ -27,8 +27,8 @@
             {
                 pause = false,
                 clear = false,
-                //selected = new[] { "CustomEventScripting" },
-                selected = snippets.Select(m => m.Name).ToArray(),
+                selected = new[] { "CustomEventScripting" },
+                //selected = snippets.Select(m => m.Name).ToArray(),
             };
             var usepause = args.Contains("-p") || args.Contains("--pause") || defaults.pause;
             var clearscr = args.Contains("-c") || args.Contains("--clear") || defaults.clear;
