@@ -9,7 +9,7 @@
         {
             //We require a custom configuration with JavaScript and CSS
             var config = Configuration.Default
-                                      .WithJavaScript()
+                                      .WithJs()
                                       .WithCss();
 
             // This is our sample source, we will do some DOM manipulation

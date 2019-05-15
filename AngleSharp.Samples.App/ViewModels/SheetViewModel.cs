@@ -1,7 +1,8 @@
 ﻿namespace Samples.ViewModels
 {
+    using AngleSharp.Css.Dom;
+    using AngleSharp.Css.Dom.Events;
     using AngleSharp.Dom;
-    using AngleSharp.Dom.Css;
     using AngleSharp.Dom.Events;
     using System;
     using System.Collections.ObjectModel;
@@ -37,9 +38,8 @@
                 _selected = value;
                 RaisePropertyChanged();
                 _tree.Clear();
-                var sheet = _selected as ICssStyleSheet;
 
-                if (sheet != null)
+                if (_selected is ICssStyleSheet sheet)
                 {
                     for (int i = 0; i < sheet.Rules.Length; i++)
                     {
@@ -57,7 +57,7 @@
             {
                 if (_document != null)
                 {
-                    _document.Context.Parsed -= ParseEnded;
+                    _document.Context.RemoveEventListener(EventNames.Parsed, ParseEnded);
                 }
 
                 _document = value;
@@ -68,16 +68,14 @@
                     _source.Add(sheet);
                 }
 
-                _document.Context.Parsed += ParseEnded;
+                _document.Context.AddEventListener(EventNames.Parsed, ParseEnded);
                 Selected = null;
             }
         }
 
         private void ParseEnded(Object sender, Event ev)
         {
-            var data = ev as CssParseEvent;
-
-            if (data != null)
+            if (ev is CssParseEvent data)
             {
                 App.Current.Dispatcher.Invoke(() => _source.Add(data.StyleSheet));
             }

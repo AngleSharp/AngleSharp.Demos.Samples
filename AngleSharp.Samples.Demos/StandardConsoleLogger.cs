@@ -1,6 +1,6 @@
 ﻿namespace AngleSharp.Samples.Demos
 {
-    using AngleSharp.Scripting.JavaScript.Services;
+    using AngleSharp.Js;
     using System;
     using System.Linq;
 

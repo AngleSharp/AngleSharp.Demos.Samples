@@ -1,6 +1,6 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
-    using AngleSharp.Extensions;
+    using AngleSharp.Dom;
     using System;
     using System.Linq;
     using System.Threading.Tasks;

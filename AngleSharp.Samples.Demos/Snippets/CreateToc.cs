@@ -1,8 +1,7 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
     using AngleSharp.Dom;
-    using AngleSharp.Dom.Html;
-    using AngleSharp.Extensions;
+    using AngleSharp.Html.Dom;
     using System;
     using System.Collections.Generic;
     using System.Linq;

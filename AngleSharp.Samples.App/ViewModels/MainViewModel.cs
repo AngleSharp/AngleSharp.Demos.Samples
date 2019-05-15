@@ -1,6 +1,7 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp;
+    using AngleSharp.Io;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -38,11 +39,15 @@
 
         public MainViewModel()
         {
-            var config = Configuration.Default.WithCss().WithRequesters(setup =>
-            {
-                setup.IsNavigationEnabled = true;
-                setup.IsResourceLoadingEnabled = true;
-            }).WithJavaScript();
+            var config = Configuration.Default
+                .WithCss()
+                .WithCookies()
+                .WithJs()
+                .WithDefaultLoader(new LoaderOptions
+                {
+                    IsNavigationDisabled = true,
+                    IsResourceLoadingEnabled = true,
+                });
             _context = BrowsingContext.New(config);
             _profiler = new ProfilerViewModel(_context);
             _errors = new ErrorsViewModel(_context);

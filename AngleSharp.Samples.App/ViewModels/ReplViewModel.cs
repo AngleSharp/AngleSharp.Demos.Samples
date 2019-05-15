@@ -1,7 +1,7 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp.Dom;
-    using AngleSharp.Extensions;
+    using AngleSharp.Js;
     using Jint.Runtime;
     using System;
     using System.Collections.ObjectModel;

@@ -10,7 +10,7 @@
         {
             // We require a custom configuration with JavaScript, CSS and the default loader
             var config = Configuration.Default
-                                      .WithJavaScript()
+                                      .WithJs()
                                       .WithCss()
                                       .WithDefaultLoader();
 

@@ -8,8 +8,9 @@
         public async Task Run()
         {
             // We require a custom configuration with JavaScript
-            var config = Configuration.Default.WithJavaScript().
-                                               WithConsoleLogger(context => new StandardConsoleLogger());
+            var config = Configuration.Default
+                .WithJs()
+                .WithConsoleLogger(context => new StandardConsoleLogger());
 
             // This is our sample source, we will trigger the load event
             var source = @"<!doctype html>

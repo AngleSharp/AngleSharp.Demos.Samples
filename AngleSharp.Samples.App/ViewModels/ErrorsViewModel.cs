@@ -1,7 +1,10 @@
 ﻿namespace Samples.ViewModels
 {
     using AngleSharp;
+    using AngleSharp.Css.Dom.Events;
+    using AngleSharp.Dom;
     using AngleSharp.Dom.Events;
+    using AngleSharp.Html.Dom.Events;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -34,15 +37,13 @@
         private void Register<T>(Action<T> listener)
             where T : Event
         {
-            _context.ParseError += (obj, ev) =>
+            _context.AddEventListener(EventNames.Error, (obj, ev) =>
             {
-                var data = ev as T;
-
-                if (data != null)
+                if (ev is T data)
                 {
                     listener.Invoke(data);
                 }
-            };
+            });
         }
 
         public void Reset()

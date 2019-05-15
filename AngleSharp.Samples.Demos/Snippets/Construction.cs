@@ -1,7 +1,7 @@
 ﻿namespace AngleSharp.Samples.Demos.Snippets
 {
-    using AngleSharp.Dom.Html;
-    using AngleSharp.Extensions;
+    using AngleSharp.Dom;
+    using AngleSharp.Html.Dom;
     using System;
     using System.Threading.Tasks;
 

@@ -8,7 +8,7 @@
         public async Task Run()
         {
             // We require a custom configuration with JavaScript
-            var config = Configuration.Default.WithJavaScript();
+            var config = Configuration.Default.WithJs();
 
             // This is our sample source, we will set the title and write on the document
             var source = @"<!doctype html>

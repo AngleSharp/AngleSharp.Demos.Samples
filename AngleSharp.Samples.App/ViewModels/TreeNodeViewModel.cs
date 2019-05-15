@@ -104,7 +104,7 @@
             if (data.Length == 0)
                 return null;
 
-            return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Text(text.Data), Foreground = Brushes.SteelBlue };
+            return new TreeNodeViewModel { Value = HtmlMarkupFormatter.Instance.Text(text), Foreground = Brushes.SteelBlue };
         }
 
         private static TreeNodeViewModel Create(IElement node)
