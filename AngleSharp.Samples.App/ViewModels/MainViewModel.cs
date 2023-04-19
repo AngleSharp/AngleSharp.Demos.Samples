@@ -45,7 +45,7 @@
                 .WithJs()
                 .WithDefaultLoader(new LoaderOptions
                 {
-                    IsNavigationDisabled = true,
+                    IsNavigationDisabled = false,
                     IsResourceLoadingEnabled = true,
                 });
             _context = BrowsingContext.New(config);
